@@ -26,17 +26,38 @@ void PointCloudLab::InitVtk()
 {
     // Set up the QVTK window
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
-    
-	viewer->registerPointPickingCallback(point_callback, this);
-	PointCloudT::Ptr clicked_points_3d_(new PointCloudT);
-	this->clicked_points_3d = clicked_points_3d_;
-	
+    	
 	ui.qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(ui.qvtkWidget->GetInteractor(), ui.qvtkWidget->GetRenderWindow());
-    ui.qvtkWidget->update();
+    
+	ui.qvtkWidget->update();
 
     viewer->resetCamera();
     ui.qvtkWidget->update();
+}
+
+
+void PointCloudLab::PointPicking() {
+	clicked_points_3d.reset(new PointCloudT);
+	cloud_mutex.lock();    // for not overwriting the point cloud 
+	////viewer->registerPointPickingCallback(&PtPicking::PtActivePick_callback, *this);
+
+	viewer->registerPointPickingCallback(point_callback, this);
+	cout << "Shift+click on three floor points, then press 'Q'..." << endl;
+
+	cloud_mutex.unlock();
+
+}
+
+void PointCloudLab::AreaPicking() {
+	clicked_points_3d.reset(new PointCloudT);
+
+	cloud_mutex.lock();    
+	viewer->registerAreaPickingCallback(area_callback, this);
+	std::cout << "press X to strat or ending picking, then press 'Q'..." << std::endl;
+
+	cloud_mutex.unlock();
+
 }
 
 void PointCloudLab::InitPointTree()
@@ -44,6 +65,7 @@ void PointCloudLab::InitPointTree()
     ui.treeWidget->setColumnCount(1); //设置列数
     ui.treeWidget->setHeaderHidden(true);
 }
+
 void PointCloudLab::OpenFile()
 {
 	cout << "clicked" << endl;
@@ -116,23 +138,73 @@ vector<string> PointCloudLab::split(const string& str, const string& delim)
 void PointCloudLab::point_callback(const pcl::visualization::PointPickingEvent& event, void* args) {
 	//struct callback_args* data = (struct callback_args *)args;
 	PointCloudLab *p = (PointCloudLab *)args;
+	if (p->motionState == POINT_PICK) {
 
+		PointT current_point;
+		event.getPoint(current_point.x, current_point.y, current_point.z);
+		p->clicked_points_3d->points.push_back(current_point);
 
-	PointT current_point;
-	event.getPoint(current_point.x, current_point.y, current_point.z);
-	p->clicked_points_3d->points.push_back(current_point);
+		pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
 
-	pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
-
-	p->viewer->removePointCloud("clicked_points");
-	p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-	p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+		p->viewer->removePointCloud("clicked_points");
+		p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
+		p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+	}
 }
  
-
+void PointCloudLab::area_callback(const pcl::visualization::AreaPickingEvent& event, void *args) {
+	PointCloudLab *p = (PointCloudLab *)args;
+	if (p->motionState == AREA_PICK) {
+		vector<int > indices;
+		if (event.getPointsIndices(indices) == false)
+			return;
+		cout << indices.size() << endl;
+		//for (size_t i = 0; i < indices.size(); i++)
+		//{
+		//	p->clicked_points_3d->points.push_back(baseCloud->points.at(indices[i]));
+		//}
+		//pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> red(clicked_points_3d, 255, 0, 0);
+		//viewer->removePointCloud("clicked_points");
+		//viewer->addPointCloud(clicked_points_3d, red, "clicked_points");
+		//viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+		//for (int i = 0; i < clicked_points_3d->points.size(); i++)
+		//	std::cout << clicked_points_3d->points[i].x << std::endl;
+		//std::cout << "clicked_points_3d->points.size()" << clicked_points_3d->points.size() << std::endl;
+		
+		//if (event.getPointIndex() == -1)
+		//	return;
+	}
+}
 //slot:
 void PointCloudLab::on_openFileAction_triggered(bool checked)
 {
     OpenFile();
     PushMessage("打开成功");
+}
+
+void PointCloudLab::on_pushButton_pointPick_clicked() {
+	//cout << "-- Point pick mode -- " << endl;
+	motionState = POINT_PICK;
+	PointPicking();
+}
+
+void PointCloudLab::on_pushButton_areaPick_clicked() {
+	motionState = AREA_PICK;
+	int n = cloudVisualVector.size();
+
+	AreaPicking();
+}
+
+void PointCloudLab::on_pushButton_drag_clicked() {
+	motionState = DRAG;
+
+	int n = clicked_points_3d->size();
+	cout << "Remove " << n << " selected points" << endl;
+	//pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
+	clicked_points_3d.reset(new PointCloudT);
+	viewer->removePointCloud("clicked_points");
+	ui.qvtkWidget->update();
+
+	//p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
+	//p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
 }

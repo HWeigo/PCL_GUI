@@ -20,6 +20,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -41,6 +42,9 @@ public:
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QWidget *widget_3;
+    QPushButton *pushButton_pointPick;
+    QPushButton *pushButton_drag;
+    QPushButton *pushButton_areaPick;
     QFrame *line_2;
     QWidget *widget_2;
     QHBoxLayout *horizontalLayout;
@@ -94,6 +98,15 @@ public:
         widget_3->setObjectName(QStringLiteral("widget_3"));
         widget_3->setMinimumSize(QSize(0, 30));
         widget_3->setMaximumSize(QSize(16777215, 30));
+        pushButton_pointPick = new QPushButton(widget_3);
+        pushButton_pointPick->setObjectName(QStringLiteral("pushButton_pointPick"));
+        pushButton_pointPick->setGeometry(QRect(70, 0, 71, 28));
+        pushButton_drag = new QPushButton(widget_3);
+        pushButton_drag->setObjectName(QStringLiteral("pushButton_drag"));
+        pushButton_drag->setGeometry(QRect(0, 0, 71, 28));
+        pushButton_areaPick = new QPushButton(widget_3);
+        pushButton_areaPick->setObjectName(QStringLiteral("pushButton_areaPick"));
+        pushButton_areaPick->setGeometry(QRect(140, 0, 71, 28));
 
         verticalLayout->addWidget(widget_3);
 
@@ -140,6 +153,9 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         treeWidget = new QTreeWidget(groupBox);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
+        treeWidget->setHeaderItem(__qtreewidgetitem);
         treeWidget->setObjectName(QStringLiteral("treeWidget"));
 
         horizontalLayout_2->addWidget(treeWidget);
@@ -172,7 +188,7 @@ public:
         PointCloudLabClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PointCloudLabClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1280, 37));
+        menuBar->setGeometry(QRect(0, 0, 1280, 26));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuFilter = new QMenu(menuBar);
@@ -220,6 +236,9 @@ public:
         action_4->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
         action_6->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
         action_7->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        pushButton_pointPick->setText(QApplication::translate("PointCloudLabClass", "Pick", Q_NULLPTR));
+        pushButton_drag->setText(QApplication::translate("PointCloudLabClass", "Drag", Q_NULLPTR));
+        pushButton_areaPick->setText(QApplication::translate("PointCloudLabClass", "Area", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("PointCloudLabClass", "\346\211\223\345\274\200\347\232\204\347\202\271\344\272\221", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "\350\276\223\345\207\272", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("PointCloudLabClass", "File", Q_NULLPTR));

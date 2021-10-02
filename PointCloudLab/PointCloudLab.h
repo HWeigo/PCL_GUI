@@ -41,17 +41,27 @@ public:
     PointCloudLab(QWidget *parent = Q_NULLPTR);
 
 private:
+	boost::mutex cloud_mutex;
 	PointCloudT::Ptr clicked_points_3d;
+	typedef enum {
+		DRAG = 0,
+		POINT_PICK = 1,
+		AREA_PICK = 2
+	} MOTION_STATE;
+
+	int motionState = DRAG;
 
     Ui::PointCloudLabClass ui;
     void OpenFile();
     void PushMessage(string msg);
     void InitVtk();
     void InitPointTree();
+	void PointPicking();
+	void AreaPicking();
 
     vector<string> split(const string& str, const string& delim);
 	static void point_callback(const pcl::visualization::PointPickingEvent& event, void* args);
-
+	static void area_callback(const pcl::visualization::AreaPickingEvent& event, void *args);
 
 protected:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
@@ -60,6 +70,9 @@ protected:
     
 public slots:
     void on_openFileAction_triggered(bool checked); 
+	void on_pushButton_pointPick_clicked();
+	void on_pushButton_areaPick_clicked();
+	void on_pushButton_drag_clicked();
                                   
 
 };
