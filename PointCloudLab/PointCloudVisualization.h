@@ -24,10 +24,16 @@ private:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
 	PointCloudT::Ptr cloud;
 	string id;
+	int frontIdx;
+	int backIdx;
+	int cloudSize;
+
 	int pointSize = 3;
 	int red = 255;
 	int green = 255;
 	int blue = 255;
+	bool isShown = true;
+
 
 public:
 	PointCloudVisualization(boost::shared_ptr<pcl::visualization::PCLVisualizer>, PointCloudT::Ptr, string);
@@ -39,6 +45,7 @@ public:
 	int GetPointSize();
 	void SetColor(int r, int g, int b);
 	void SetPointSize(int sz);
+	bool IsShown() { return isShown; };
 
 
 };

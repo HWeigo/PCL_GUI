@@ -33,11 +33,11 @@ class Ui_PointCloudLabClass
 public:
     QAction *openFileAction;
     QAction *saveFileAction;
-    QAction *action_2;
-    QAction *action_3;
-    QAction *action_4;
-    QAction *action_6;
-    QAction *action_7;
+    QAction *filterAction1;
+    QAction *filterAction2;
+    QAction *filterAction3;
+    QAction *copyPointAction;
+    QAction *extractPointAction;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QWidget *widget_3;
@@ -73,16 +73,16 @@ public:
         openFileAction->setObjectName(QStringLiteral("openFileAction"));
         saveFileAction = new QAction(PointCloudLabClass);
         saveFileAction->setObjectName(QStringLiteral("saveFileAction"));
-        action_2 = new QAction(PointCloudLabClass);
-        action_2->setObjectName(QStringLiteral("action_2"));
-        action_3 = new QAction(PointCloudLabClass);
-        action_3->setObjectName(QStringLiteral("action_3"));
-        action_4 = new QAction(PointCloudLabClass);
-        action_4->setObjectName(QStringLiteral("action_4"));
-        action_6 = new QAction(PointCloudLabClass);
-        action_6->setObjectName(QStringLiteral("action_6"));
-        action_7 = new QAction(PointCloudLabClass);
-        action_7->setObjectName(QStringLiteral("action_7"));
+        filterAction1 = new QAction(PointCloudLabClass);
+        filterAction1->setObjectName(QStringLiteral("filterAction1"));
+        filterAction2 = new QAction(PointCloudLabClass);
+        filterAction2->setObjectName(QStringLiteral("filterAction2"));
+        filterAction3 = new QAction(PointCloudLabClass);
+        filterAction3->setObjectName(QStringLiteral("filterAction3"));
+        copyPointAction = new QAction(PointCloudLabClass);
+        copyPointAction->setObjectName(QStringLiteral("copyPointAction"));
+        extractPointAction = new QAction(PointCloudLabClass);
+        extractPointAction->setObjectName(QStringLiteral("extractPointAction"));
         centralWidget = new QWidget(PointCloudLabClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -140,7 +140,12 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         treeWidget = new QTreeWidget(groupBox);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
+        treeWidget->setHeaderItem(__qtreewidgetitem);
         treeWidget->setObjectName(QStringLiteral("treeWidget"));
+        treeWidget->setMouseTracking(true);
+        treeWidget->setFocusPolicy(Qt::StrongFocus);
 
         horizontalLayout_2->addWidget(treeWidget);
 
@@ -198,11 +203,11 @@ public:
         menuBar->addAction(menuRoi->menuAction());
         menuFile->addAction(openFileAction);
         menuFile->addAction(saveFileAction);
-        menuFilter->addAction(action_2);
-        menuFilter->addAction(action_3);
-        menuFilter->addAction(action_4);
-        menuRoi->addAction(action_6);
-        menuRoi->addAction(action_7);
+        menuFilter->addAction(filterAction1);
+        menuFilter->addAction(filterAction2);
+        menuFilter->addAction(filterAction3);
+        menuRoi->addAction(copyPointAction);
+        menuRoi->addAction(extractPointAction);
 
         retranslateUi(PointCloudLabClass);
 
@@ -214,12 +219,12 @@ public:
         PointCloudLabClass->setWindowTitle(QApplication::translate("PointCloudLabClass", "PointCloudLab", Q_NULLPTR));
         openFileAction->setText(QApplication::translate("PointCloudLabClass", "Open File", Q_NULLPTR));
         saveFileAction->setText(QApplication::translate("PointCloudLabClass", "Save File", Q_NULLPTR));
-        action_2->setText(QApplication::translate("PointCloudLabClass", "\347\233\264\351\200\232\346\273\244\346\263\242", Q_NULLPTR));
-        action_3->setText(QApplication::translate("PointCloudLabClass", "\344\275\223\347\264\240\346\273\244\346\263\242\n"
+        filterAction1->setText(QApplication::translate("PointCloudLabClass", "\347\233\264\351\200\232\346\273\244\346\263\242", Q_NULLPTR));
+        filterAction2->setText(QApplication::translate("PointCloudLabClass", "\344\275\223\347\264\240\346\273\244\346\263\242\n"
 "", Q_NULLPTR));
-        action_4->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
-        action_6->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
-        action_7->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        filterAction3->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
+        copyPointAction->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        extractPointAction->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("PointCloudLabClass", "\346\211\223\345\274\200\347\232\204\347\202\271\344\272\221", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "\350\276\223\345\207\272", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("PointCloudLabClass", "File", Q_NULLPTR));

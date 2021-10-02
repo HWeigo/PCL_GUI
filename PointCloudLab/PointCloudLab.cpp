@@ -3,6 +3,10 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QTextCodec>
+#include <QFormLayout>
+#include <QSpinBox>
+#include <QDialogButtonBox>
+#include <QLabel>
 
 #include <iostream>
 using namespace std;
@@ -16,48 +20,74 @@ PointCloudLab::PointCloudLab(QWidget *parent)
     ui.setupUi(this);
     InitVtk();
     InitPointTree();
+    InitMenuAction();
+}
+PointCloudLab::~PointCloudLab()
+{
+    delete treeMenu;
+    delete showAction;
+    delete hideAction;
+    delete deleteAction;
+    delete setColorAction;
+    for (int i = 0; i < PointCloudTree.size(); ++i)
+    {
+        if (PointCloudTree[i] != nullptr) {
+            delete PointCloudTree[i];
+        }
+    }
+}
 
+//functions:
+
+void PointCloudLab::contextMenuEvent(QContextMenuEvent *event)
+{
+    QTreeWidgetItem *item = ui.treeWidget->currentItem();
+    if (item != nullptr)
+    {
+        for (int i = 0; i < PointCloudTree.size(); ++i)
+        {
+            if (PointCloudTree[i] != nullptr&&PointCloudTree[i]->cloudName == item)
+            {
+                curPointsId = i;
+                treeMenu->clear();
+                treeMenu->addAction(showAction);
+                treeMenu->addAction(hideAction);
+                treeMenu->addAction(deleteAction);
+                treeMenu->addAction(setColorAction);
+                treeMenu->exec(QCursor::pos());   //菜单弹出位置为鼠标点击位置
+               
+                break;
+            }
+        }
+    }
+    event->accept();
 }
 
 
-//functions:
+void PointCloudLab::InitMenuAction()
+{
+    treeMenu = new QMenu(ui.treeWidget);
+    showAction = new QAction("显示", ui.treeWidget);
+    hideAction = new QAction("隐藏", ui.treeWidget);
+    deleteAction = new QAction("删除点云", ui.treeWidget);
+    setColorAction = new QAction("设置颜色", ui.treeWidget);
+
+    connect(showAction, SIGNAL(triggered(bool)), this, SLOT(OnShowAction()));
+    connect(hideAction, SIGNAL(triggered(bool)), this, SLOT(OnHideAction()));
+    connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(OnDeleteAction()));
+    connect(setColorAction, SIGNAL(triggered(bool)), this, SLOT(OnSetColorAction()));
+}
 
 void PointCloudLab::InitVtk()
 {
     // Set up the QVTK window
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
-    	
-	ui.qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
+    ui.qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
     viewer->setupInteractor(ui.qvtkWidget->GetInteractor(), ui.qvtkWidget->GetRenderWindow());
-    
-	ui.qvtkWidget->update();
+    ui.qvtkWidget->update();
 
     viewer->resetCamera();
     ui.qvtkWidget->update();
-}
-
-
-void PointCloudLab::PointPicking() {
-	clicked_points_3d.reset(new PointCloudT);
-	cloud_mutex.lock();    // for not overwriting the point cloud 
-	////viewer->registerPointPickingCallback(&PtPicking::PtActivePick_callback, *this);
-
-	viewer->registerPointPickingCallback(point_callback, this);
-	cout << "Shift+click on three floor points, then press 'Q'..." << endl;
-
-	cloud_mutex.unlock();
-
-}
-
-void PointCloudLab::AreaPicking() {
-	clicked_points_3d.reset(new PointCloudT);
-
-	cloud_mutex.lock();    
-	viewer->registerAreaPickingCallback(area_callback, this);
-	std::cout << "press X to strat or ending picking, then press 'Q'..." << std::endl;
-
-	cloud_mutex.unlock();
-
 }
 
 void PointCloudLab::InitPointTree()
@@ -66,40 +96,6 @@ void PointCloudLab::InitPointTree()
     ui.treeWidget->setHeaderHidden(true);
 }
 
-void PointCloudLab::OpenFile()
-{
-	cout << "clicked" << endl;
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open PointCloud"), ".",
-        tr("Open PCD files(*.pcd)"));
-    if (fileName.isEmpty())
-    {
-        //std::string file_name = fileName.toStdString();
-		cerr << "Failed to open file " << endl;
-        PushMessage("ERROR: Cannot open file ");
-    }
-
-    QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
-    std::string filePath = code->fromUnicode(fileName).data();
-
-	pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>());
-
-	if (pcl::io::loadPCDFile(filePath, *cloud))
-	{
-		cerr << "ERROR: Cannot open file " << filePath << "! Aborting..." << endl;
-		return;
-	}
-    vector<string> tempId = PointCloudLab::split(filePath, "/");
-    string id = tempId.back();
-	PointCloudVisualization pcv(viewer, cloud, id);
-	cloudVisualVector.push_back(pcv);
-	pcv.Show();
-	viewer->resetCamera();
-	ui.qvtkWidget->update();
-    
-    PointTree * tempTree= new PointTree(&ui, id, 100, 100);
-    PointCloudTree.push_back(tempTree);
-}
 
 void PointCloudLab::PushMessage(string msg)
 {
@@ -135,76 +131,198 @@ vector<string> PointCloudLab::split(const string& str, const string& delim)
     return res;
 }
 
-void PointCloudLab::point_callback(const pcl::visualization::PointPickingEvent& event, void* args) {
-	//struct callback_args* data = (struct callback_args *)args;
-	PointCloudLab *p = (PointCloudLab *)args;
-	if (p->motionState == POINT_PICK) {
-
-		PointT current_point;
-		event.getPoint(current_point.x, current_point.y, current_point.z);
-		p->clicked_points_3d->points.push_back(current_point);
-
-		pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
-
-		p->viewer->removePointCloud("clicked_points");
-		p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-		p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
-	}
+int PointCloudLab::OpenFile(string filePath)
+{
+    vector<string> temp = split(filePath, ".");
+    if (temp.back() == "pcd") {
+        return OpenPcdFile(filePath);
+    }
+    else if (temp.back() == "ply") {
+        return OpenPlyFile(filePath);
+    }
+    else if (temp.back() == "obj") {
+        return OpenObjFile(filePath);
+    }
+    else if (temp.back() == "stl") {
+        return OpenStlFile(filePath);
+    }
+    else if (temp.back() == "png") {
+        return OpenPngFile(filePath);
+    }
 }
- 
-void PointCloudLab::area_callback(const pcl::visualization::AreaPickingEvent& event, void *args) {
-	PointCloudLab *p = (PointCloudLab *)args;
-	if (p->motionState == AREA_PICK) {
-		vector<int > indices;
-		if (event.getPointsIndices(indices) == false)
-			return;
-		cout << indices.size() << endl;
-		//for (size_t i = 0; i < indices.size(); i++)
-		//{
-		//	p->clicked_points_3d->points.push_back(baseCloud->points.at(indices[i]));
-		//}
-		//pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> red(clicked_points_3d, 255, 0, 0);
-		//viewer->removePointCloud("clicked_points");
-		//viewer->addPointCloud(clicked_points_3d, red, "clicked_points");
-		//viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
-		//for (int i = 0; i < clicked_points_3d->points.size(); i++)
-		//	std::cout << clicked_points_3d->points[i].x << std::endl;
-		//std::cout << "clicked_points_3d->points.size()" << clicked_points_3d->points.size() << std::endl;
-		
-		//if (event.getPointIndex() == -1)
-		//	return;
-	}
+
+int PointCloudLab::OpenPcdFile(string path)
+{
+    pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>());
+
+    if (pcl::io::loadPCDFile(path, *cloud))
+    {
+        cerr << "ERROR: Cannot open file " << path << "! Aborting..." << endl;
+        return -1;
+    }
+    vector<string> tempId = PointCloudLab::split(path, "/");
+    string id = tempId.back();
+    PointCloudVisualization *pcv = new PointCloudVisualization(viewer, cloud, id);
+    cloudVisualVector.push_back(pcv);
+    pcv->Show();
+    viewer->resetCamera();
+    ui.qvtkWidget->update();
+
+    PointTree * tempTree = new PointTree(&ui, id, 100, 100);
+    PointCloudTree.push_back(tempTree);
+    isDeleted.push_back(false);
+    isShown.push_back(true);
+    return 1;
 }
+int PointCloudLab::OpenPlyFile(string path)
+{
+    return 0;
+}
+int PointCloudLab::OpenObjFile(string path)
+{
+    return 0;
+}
+int PointCloudLab::OpenStlFile(string path)
+{
+    return 0;
+}
+int PointCloudLab::OpenMeshFile(string path)
+{
+    return 0;
+}
+int PointCloudLab::OpenPngFile(string path)
+{
+    QDialog dialog(this);
+    QFormLayout form(&dialog);
+    form.addRow(new QLabel("User input:"));
+    // Value1
+    QString value1 = QString("Value1: ");
+    QSpinBox *spinbox1 = new QSpinBox(&dialog);
+    form.addRow(value1, spinbox1);
+    // Value2
+    QString value2 = QString("Value2: ");
+    QSpinBox *spinbox2 = new QSpinBox(&dialog);
+    form.addRow(value2, spinbox2);
+    // Add Cancel and OK button
+    QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+        Qt::Horizontal, &dialog);
+    form.addRow(&buttonBox);
+    QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+    // Process when OK button is clicked
+    if (dialog.exec() == QDialog::Accepted) {
+        // Do something here
+    }
+    return 0;
+}
+
+
+
 //slot:
 void PointCloudLab::on_openFileAction_triggered(bool checked)
 {
-    OpenFile();
-    PushMessage("打开成功");
+    QString curPath = QDir::currentPath();
+    QString dlgTitle = "打开文件"; //对话框标题
+    QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+    QString fileName = QFileDialog::getOpenFileName(this, dlgTitle, curPath, filter);
+
+    if (fileName.isEmpty())
+    {
+        return;
+    }
+
+    QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
+    std::string filePath = code->fromUnicode(fileName).data();
+
+    if (OpenFile(filePath) == 1)
+    {
+        PushMessage("打开成功");
+    }
+    else if(OpenFile(filePath) == -1)
+    {
+        PushMessage("打开失败");
+    }
+}
+void PointCloudLab::on_saveFileAction_triggered(bool checked)
+{
+    cout << "save file\n";
 }
 
-void PointCloudLab::on_pushButton_pointPick_clicked() {
-	//cout << "-- Point pick mode -- " << endl;
-	motionState = POINT_PICK;
-	PointPicking();
+void PointCloudLab::on_filterAction1_triggered(bool checked)
+{
+    cout << "直通滤波 \n";
+}//直通滤波
+void PointCloudLab::on_filterAction2_triggered(bool checked)
+{
+    cout << "体素滤波\n";
 }
+//体素滤波
+void PointCloudLab::on_filterAction3_triggered(bool checked) 
+{
+    cout << "统计滤波\n";
+}//统计滤波
 
-void PointCloudLab::on_pushButton_areaPick_clicked() {
-	motionState = AREA_PICK;
-	int n = cloudVisualVector.size();
 
-	AreaPicking();
-}
+void PointCloudLab::on_copyPointAction_triggered(bool checked)
+{
+    cout << "复制点云\n";
+}//复制点云
+void PointCloudLab::on_extractPointAction_triggered(bool checked)
+{
+    cout << "提取点云\n";
+}//提取点云
 
-void PointCloudLab::on_pushButton_drag_clicked() {
-	motionState = DRAG;
 
-	int n = clicked_points_3d->size();
-	cout << "Remove " << n << " selected points" << endl;
-	//pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
-	clicked_points_3d.reset(new PointCloudT);
-	viewer->removePointCloud("clicked_points");
+void PointCloudLab::OnShowAction()
+{
+    cout << "show points  " << curPointsId << endl;
+    if (isDeleted[curPointsId])
+        return;
+    if (isShown[curPointsId])
+        return;
+    //todo 显示点云
+	PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	pcv->Show();
 	ui.qvtkWidget->update();
 
-	//p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-	//p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+
+    PointCloudTree[curPointsId]->cloudName->setTextColor(0, QColor(0, 0, 0));
+    PointCloudTree[curPointsId]->pointsSize->setTextColor(0, QColor(0, 0, 0));
+    PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(0, 0, 0));
+    isShown[curPointsId] = true;
 }
+void PointCloudLab::OnHideAction()
+{
+    cout << "hide points " << curPointsId << endl;
+    if (isDeleted[curPointsId])
+        return;
+    if (!isShown[curPointsId])
+        return;
+
+	PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	pcv->Hide();
+	ui.qvtkWidget->update();
+   
+    PointCloudTree[curPointsId]->cloudName->setTextColor(0, QColor(150, 150, 150));
+    PointCloudTree[curPointsId]->pointsSize->setTextColor(0, QColor(150, 150, 150));
+    PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(150, 150, 150));
+    isShown[curPointsId] = false;
+}
+void PointCloudLab::OnDeleteAction()
+{
+    if (PointCloudTree[curPointsId] != nullptr) {
+        delete PointCloudTree[curPointsId];
+        PointCloudTree[curPointsId] = nullptr;
+        isDeleted[curPointsId] = true;
+    }
+    cout << "delete points " << curPointsId << endl;
+}
+
+void PointCloudLab::OnSetColorAction()
+{
+    cout << "set color " << curPointsId << endl;
+}
+
+
+

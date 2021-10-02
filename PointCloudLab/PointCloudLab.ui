@@ -50,45 +50,6 @@
         <height>30</height>
        </size>
       </property>
-      <widget class="QPushButton" name="pushButton_pointPick">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>0</y>
-         <width>71</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Pick</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_drag">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>71</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Drag</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_areaPick">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>0</y>
-         <width>71</width>
-         <height>28</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Area</string>
-       </property>
-      </widget>
      </widget>
     </item>
     <item>
@@ -117,7 +78,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="qvtkWidget" native="true"/>
+        <widget class="QVTKWidget" name="qvtkWidget"/>
        </item>
        <item>
         <widget class="Line" name="line">
@@ -179,6 +140,12 @@
              </property>
              <item>
               <widget class="QTreeWidget" name="treeWidget">
+               <property name="mouseTracking">
+                <bool>true</bool>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <column>
                 <property name="text">
                  <string notr="true">1</string>
@@ -234,7 +201,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>26</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -248,9 +215,9 @@
     <property name="title">
      <string>Filter</string>
     </property>
-    <addaction name="action_2"/>
-    <addaction name="action_3"/>
-    <addaction name="action_4"/>
+    <addaction name="filterAction1"/>
+    <addaction name="filterAction2"/>
+    <addaction name="filterAction3"/>
    </widget>
    <widget class="QMenu" name="menuFit">
     <property name="title">
@@ -276,8 +243,8 @@
     <property name="title">
      <string>Roi</string>
     </property>
-    <addaction name="action_6"/>
-    <addaction name="action_7"/>
+    <addaction name="copyPointAction"/>
+    <addaction name="extractPointAction"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFilter"/>
@@ -297,28 +264,28 @@
     <string>Save File</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="filterAction1">
    <property name="text">
     <string>直通滤波</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="filterAction2">
    <property name="text">
     <string>体素滤波
 </string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="filterAction3">
    <property name="text">
     <string>统计滤波</string>
    </property>
   </action>
-  <action name="action_6">
+  <action name="copyPointAction">
    <property name="text">
     <string>复制所选点云</string>
    </property>
   </action>
-  <action name="action_7">
+  <action name="extractPointAction">
    <property name="text">
     <string>提取所选点云</string>
    </property>

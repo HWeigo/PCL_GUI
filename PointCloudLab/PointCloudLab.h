@@ -6,6 +6,9 @@
 
 // Qt
 #include <QMainWindow>
+#include <QMenu>
+#include <QAction>
+#include <QContextMenuEvent>
 // Point Cloud Library
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
@@ -39,40 +42,54 @@ class PointCloudLab : public QMainWindow
 
 public:
     PointCloudLab(QWidget *parent = Q_NULLPTR);
+    ~PointCloudLab();
 
 private:
-	boost::mutex cloud_mutex;
-	PointCloudT::Ptr clicked_points_3d;
-	typedef enum {
-		DRAG = 0,
-		POINT_PICK = 1,
-		AREA_PICK = 2
-	} MOTION_STATE;
-
-	int motionState = DRAG;
-
     Ui::PointCloudLabClass ui;
-    void OpenFile();
+
+    QMenu *treeMenu;
+    QAction *showAction;
+    QAction *hideAction;
+    QAction *deleteAction;
+    QAction *setColorAction;
+    int curPointsId = -1;
+
+
+    void contextMenuEvent(QContextMenuEvent *event);
+
     void PushMessage(string msg);
     void InitVtk();
     void InitPointTree();
-	void PointPicking();
-	void AreaPicking();
-
+    void InitMenuAction();
     vector<string> split(const string& str, const string& delim);
-	static void point_callback(const pcl::visualization::PointPickingEvent& event, void* args);
-	static void area_callback(const pcl::visualization::AreaPickingEvent& event, void *args);
+    
+    //打开文件相关
+    int OpenFile(string filePath);
+    int OpenPcdFile(string path);
+    int OpenPlyFile(string path);
+    int OpenObjFile(string path);
+    int OpenStlFile(string path);
+    int OpenMeshFile(string path);
+    int OpenPngFile(string path);
+
 
 protected:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-	vector<PointCloudVisualization> cloudVisualVector;
+	vector<PointCloudVisualization*> cloudVisualVector;
     vector<PointTree*> PointCloudTree;
+    vector<bool> isDeleted;
+    vector<bool> isShown;
     
 public slots:
     void on_openFileAction_triggered(bool checked); 
-	void on_pushButton_pointPick_clicked();
-	void on_pushButton_areaPick_clicked();
-	void on_pushButton_drag_clicked();
-                                  
-
+    void on_saveFileAction_triggered(bool checked);
+    void on_filterAction1_triggered(bool checked);//直通滤波
+    void on_filterAction2_triggered(bool checked);//体素滤波
+    void on_filterAction3_triggered(bool checked);//统计滤波
+    void on_copyPointAction_triggered(bool checked);//复制点云
+    void on_extractPointAction_triggered(bool checked);//提取点云
+    void OnShowAction();
+    void OnHideAction();
+    void OnDeleteAction();
+    void OnSetColorAction();
 };

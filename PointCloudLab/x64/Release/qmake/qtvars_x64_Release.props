@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
 <Qt_DEFINES_>UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG</Qt_DEFINES_>
-<Qt_INCLUDEPATH_>D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtWidgets;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtGui;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtANGLE;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtCore;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\mkspecs\win32-msvc</Qt_INCLUDEPATH_>
+<Qt_INCLUDEPATH_>"C:\Users\WeiHuang\OneDrive - sjtu.edu.cn\??\WeChat Files\wxid_pjv4p4lkmk3o11\FileStorage\File\2021-10\PointCloudLab\PointCloudLab\x64\Release\qmake\temp";D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtWidgets;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtGui;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtANGLE;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\include\QtCore;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\mkspecs\win32-msvc</Qt_INCLUDEPATH_>
 <Qt_LIBS_>D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\lib\qtmain.lib;shell32.lib;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\lib\Qt5Widgets.lib;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\lib\Qt5Gui.lib;D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\lib\Qt5Core.lib</Qt_LIBS_>
 <Qt_LIBPATH_>D:\EnvSetting\Qt\Qt5.9.9\5.9.9\msvc2015_64\lib;C:\openssl\lib;C:\Utils\my_sql\my_sql\lib;C:\Utils\postgresql\pgsql\lib</Qt_LIBPATH_>
 <QMake_QT_SYSROOT_></QMake_QT_SYSROOT_>
