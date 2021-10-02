@@ -2,7 +2,7 @@
 
 PointCloudVisualization::PointCloudVisualization(boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer_in, \
 	PointCloudT::Ptr cloud_in, string id_in) : viewer(viewer_in), cloud(cloud_in), id(id_in) {
-
+	pointSize = cloud->size();
 }
 
 void PointCloudVisualization::Show() {
@@ -55,6 +55,10 @@ vector<int> PointCloudVisualization::GetColor() {
 
 int PointCloudVisualization::GetPointSize() {
 	return pointSize;
+}
+
+int PointCloudVisualization::GetCloudSize() {
+	return cloudSize;
 }
 
 

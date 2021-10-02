@@ -43,6 +43,8 @@ public:
 	void Hide();
 	vector<int> GetColor();
 	int GetPointSize();
+	int GetCloudSize();
+
 	void SetColor(int r, int g, int b);
 	void SetPointSize(int sz);
 	bool IsShown() { return isShown; };
