@@ -80,6 +80,11 @@ private:
 	QAction *saveCurPointAction;
     int curPointsId = -1;
 
+	int pointViewerSize = 3;
+	int backGroundColor[3] = { 0,0,0 };
+	bool isCoordinateSystemShown = false;
+	double coordinateSystemSize = 0.1;
+	bool isCoordinateSystemSizeShown = false;
 
     void contextMenuEvent(QContextMenuEvent *event);
 
@@ -134,4 +139,5 @@ public slots:
 	void on_pushButton_clicked();
 	void on_pushButton_allSelect_clicked();
 	void on_pushButton_invertSelect_clicked();
+	void on_pushButton_setting_clicked();
 };

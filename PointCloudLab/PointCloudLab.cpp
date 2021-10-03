@@ -106,6 +106,7 @@ void PointCloudLab::InitVtk()
     ui.qvtkWidget->update();
 
     viewer->resetCamera();
+	if(isCoordinateSystemShown) viewer->addCoordinateSystem(coordinateSystemSize);
     ui.qvtkWidget->update();
 	
 	viewer->registerAreaPickingCallback(area_callback, this);
@@ -193,7 +194,7 @@ int PointCloudLab::OpenPcdFile(string path)
 	completeCloud->AddCloud(cloud);
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", 0, 0);
+	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", pcv->GetCloudSize(), 0);
 	PointCloudTree.push_back(tempTree);
     //isDeleted.push_back(false);
     //isShown.push_back(true);
@@ -529,10 +530,64 @@ void PointCloudLab::on_filterAction3_triggered(bool checked)
 void PointCloudLab::on_copyPointAction_triggered(bool checked)
 {
     cout << "复制点云\n";
+	if (setSelected.empty() || selectedCloudIdx == -1)
+		return;
+
+	string id = "copy_" + pointCloudVector->GetId(selectedCloudIdx);
+	PointCloudT::Ptr tempPtr(new PointCloudT);
+	*tempPtr = *clicked_points_3d;
+	int idx = pointCloudVector->AddPointCloud(tempPtr, id);
+
+	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
+	PointCloudTree.push_back(tempTree);
+
+	PointCloudTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->pointsSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->faceSize->setTextColor(0, QColor(150, 150, 150));
+	
+	motionState = DRAG;
+	ui.qvtkWidget->setFocus();
+	ui.qvtkWidget->show();
+	QKeyEvent keyPress(QEvent::KeyPress, Qt::Key_X, Qt::NoModifier, "x");
+	QKeyEvent keyRelease(QEvent::KeyRelease, Qt::Key_X, Qt::NoModifier);
+	QCoreApplication::sendEvent(ui.qvtkWidget, &keyPress);
+	QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
 }//复制点云
 void PointCloudLab::on_extractPointAction_triggered(bool checked)
 {
     cout << "提取点云\n";
+	if (setSelected.empty() || selectedCloudIdx == -1)
+		return;
+
+	string id = "copy_" + pointCloudVector->GetId(selectedCloudIdx);
+	PointCloudT::Ptr tempPtr(new PointCloudT);
+	*tempPtr = *clicked_points_3d;
+	int idx = pointCloudVector->AddPointCloud(tempPtr, id);
+
+	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
+	PointCloudTree.push_back(tempTree);
+
+	PointCloudTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->pointsSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->faceSize->setTextColor(0, QColor(150, 150, 150));
+
+	motionState = DRAG;
+	ui.qvtkWidget->setFocus();
+	ui.qvtkWidget->show();
+	QKeyEvent keyPress(QEvent::KeyPress, Qt::Key_X, Qt::NoModifier, "x");
+	QKeyEvent keyRelease(QEvent::KeyRelease, Qt::Key_X, Qt::NoModifier);
+	QCoreApplication::sendEvent(ui.qvtkWidget, &keyPress);
+	QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
+
+	//Point oriCloudPtr = pointCloudVector->GetCloudPtrOfIdx(selectedCloudIdx);
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(selectedCloudIdx);
+	pcv->DeletePointFromVector(setSelected);
+	ui.qvtkWidget->update();
+
+	PointCloudTree[selectedCloudIdx]->pointsSize->setText(0, QString("点数: ") + QString::number(pcv->GetCloudSize()));
+
 }//提取点云
 
 
@@ -702,7 +757,7 @@ void PointCloudLab::AreaPicking() {
 	QKeyEvent keyPress(QEvent::KeyPress, Qt::Key_X, Qt::NoModifier, "x");
 	QKeyEvent keyRelease(QEvent::KeyRelease, Qt::Key_X, Qt::NoModifier);
 	QCoreApplication::sendEvent(ui.qvtkWidget, &keyPress);
-	//QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
+	QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
 
 	cloud_mutex.unlock();
 }
@@ -757,74 +812,78 @@ void PointCloudLab::on_pushButton_invertSelect_clicked() {
 void PointCloudLab::point_callback(const pcl::visualization::PointPickingEvent& event, void* args) {
 	//struct callback_args* data = (struct callback_args *)args;
 	PointCloudLab *p = (PointCloudLab *)args;
-	if (p->motionState == POINT_PICK) {
+	if (p->motionState != POINT_PICK)
+		return;
 
-		PointT current_point;
-		//event.getPoint(current_point.x, current_point.y, current_point.z);
-		int idx = event.getPointIndex();
-		if (idx == -1)
-			return;
-		PointCloudT::Ptr currCloud = p->pointCloudVector->GetCloudPtrOfIdx(p->selectedCloudIdx);
-		//p->clicked_points_3d->points.push_back(current_point);
-		p->clicked_points_3d->points.push_back(currCloud->points.at(idx));
+	PointT current_point;
+	//event.getPoint(current_point.x, current_point.y, current_point.z);
+	int idx = event.getPointIndex();
+	if (idx == -1)
+		return;
+	PointCloudT::Ptr currCloud = p->pointCloudVector->GetCloudPtrOfIdx(p->selectedCloudIdx);
+	//p->clicked_points_3d->points.push_back(current_point);
+	p->clicked_points_3d->points.push_back(currCloud->points.at(idx));
 
-		pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
+	pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
 
-		p->viewer->removePointCloud("clicked_points");
-		p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-		p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
-		p->ui.qvtkWidget->update();
-
-	}
+	p->viewer->removePointCloud("clicked_points");
+	p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
+	p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+	p->ui.qvtkWidget->update();	
 }
 
 void PointCloudLab::area_callback(const pcl::visualization::AreaPickingEvent& event, void *args) {
 	PointCloudLab *p = (PointCloudLab *)args;
+
+	if (p->motionState != AREA_PICK)
+		return;
+	if (!p->pointCloudVector->IsValid(p->selectedCloudIdx))
+		return;
+	
 	PointCloudT::Ptr currCloud = p->pointCloudVector->GetCloudPtrOfIdx(p->selectedCloudIdx);
 
-	if (p->motionState == AREA_PICK) {
-		if (!p->ui.checkBox_undo->isChecked()) {
-			vector<int>().swap(p->selectedPointIdxs);
-			if (event.getPointsIndices(p->selectedPointIdxs) == false)
-				return;
-
-			for (size_t i = 0; i < p->selectedPointIdxs.size(); i++)
-			{
-				//p->clicked_points_3d->points.push_back(baseCloud->points.at(indices[i]));
-				int idx = p->selectedPointIdxs[i];
-				p->setSelected.insert(idx);
-			}
-		}
-		else {
-			vector<int>().swap(p->selectedPointIdxs);
-			if (event.getPointsIndices(p->selectedPointIdxs) == false)
-				return;
-			for (size_t i = 0; i < p->selectedPointIdxs.size(); i++)
-			{
-				int idx = p->selectedPointIdxs[i];
-				if (p->setSelected.find(idx) == p->setSelected.end())
-					continue;
-				p->setSelected.erase(idx);
-			}
-		}
-		p->clicked_points_3d.reset(new PointCloudT);
-		if (!p->setSelected.size()) {
-			p->viewer->removePointCloud("clicked_points");
-			p->ui.qvtkWidget->update();
+	
+	if (!p->ui.checkBox_undo->isChecked()) {
+		vector<int>().swap(p->selectedPointIdxs);
+		if (event.getPointsIndices(p->selectedPointIdxs) == false)
 			return;
-		}
-		for (auto i = p->setSelected.begin(); i != p->setSelected.end(); ++i)
-			p->clicked_points_3d->points.push_back(currCloud->points.at(*i));
 
-		pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
-		p->viewer->removePointCloud("clicked_points");
-		p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-		p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
-		cout << "clicked_points_3d->points.size()" << p->clicked_points_3d->points.size() << endl;
-		p->ui.qvtkWidget->update();
-		//if (event.getPointIndex() == -1)
-		//	return;
+		for (size_t i = 0; i < p->selectedPointIdxs.size(); i++)
+		{
+			//p->clicked_points_3d->points.push_back(baseCloud->points.at(indices[i]));
+			int idx = p->selectedPointIdxs[i];
+			p->setSelected.insert(idx);
+		}
 	}
+	else {
+		vector<int>().swap(p->selectedPointIdxs);
+		if (event.getPointsIndices(p->selectedPointIdxs) == false)
+			return;
+		for (size_t i = 0; i < p->selectedPointIdxs.size(); i++)
+		{
+			int idx = p->selectedPointIdxs[i];
+			if (p->setSelected.find(idx) == p->setSelected.end())
+				continue;
+			p->setSelected.erase(idx);
+		}
+	}
+	p->clicked_points_3d.reset(new PointCloudT);
+	if (!p->setSelected.size()) {
+		p->viewer->removePointCloud("clicked_points");
+		p->ui.qvtkWidget->update();
+		return;
+	}
+	for (auto i = p->setSelected.begin(); i != p->setSelected.end(); ++i)
+		p->clicked_points_3d->points.push_back(currCloud->points.at(*i));
+
+	pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
+	p->viewer->removePointCloud("clicked_points");
+	p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
+	p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
+	cout << "clicked_points_3d->points.size()" << p->clicked_points_3d->points.size() << endl;
+	p->ui.qvtkWidget->update();
+	//if (event.getPointIndex() == -1)
+	//	return;
 }
 void PointCloudLab::on_pushButton_pointPick_clicked() {
 	cout << "-- Point pick mode -- " << endl;
@@ -927,6 +986,13 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 		return;
 	}
 
+	if (validPoints[curComboBox.currentIndex()] != selectedCloudIdx) {
+		clicked_points_3d.reset(new PointCloudT);
+		vector<int>().swap(selectedPointIdxs);
+		unordered_set<int>().swap(setSelected);
+		viewer->removePointCloud("clicked_points");
+		ui.qvtkWidget->update();
+	}
 	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
 	int n = pointCloudVector->GetSize();
 	for (int i = 0; i < n; ++i) {
@@ -975,15 +1041,91 @@ void PointCloudLab::on_pushButton_drag_clicked() {
 
 	int n = clicked_points_3d->size();
 	cout << "Remove " << n << " selected points" << endl;
-	//pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
 	clicked_points_3d.reset(new PointCloudT);
+	vector<int>().swap(selectedPointIdxs);
+	unordered_set<int>().swap(setSelected);
 	viewer->removePointCloud("clicked_points");
 	ui.qvtkWidget->update();
+
+	//pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
 	//p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
 	//p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
 }
 
+void PointCloudLab::on_pushButton_setting_clicked() {
+	QDialog dialog(this);
+	dialog.setFixedSize(320, 240);
+	dialog.setWindowTitle("显示设置");
+	QFormLayout form(&dialog);
 
+	QHBoxLayout  tempLayout1;
+	QSpinBox r, g, b;
+	r.setRange(0, 255);
+	g.setRange(0, 255);
+	b.setRange(0, 255);
+	r.setValue(backGroundColor[0]);
+	g.setValue(backGroundColor[1]);
+	b.setValue(backGroundColor[2]);
+	tempLayout1.addWidget(&r);
+	tempLayout1.addWidget(&g);
+	tempLayout1.addWidget(&b);
+	form.addRow(QString("背景颜色: "), &tempLayout1);
+
+	QSpinBox pointSizeBox;
+	pointSizeBox.setValue(pointViewerSize);
+	pointSizeBox.setRange(1, 10);
+
+	form.addRow(QString("点大小: "), &pointSizeBox);
+
+	QCheckBox checkBox1("显示坐标轴");
+	checkBox1.setChecked(isCoordinateSystemShown);
+	form.addRow(&checkBox1);
+
+	QDoubleSpinBox coordSizeBox;
+	coordSizeBox.setValue(coordinateSystemSize);
+	coordSizeBox.setRange(0.0001, 100000);
+
+	form.addRow(QString("坐标轴大小: "), &coordSizeBox);
+
+	QCheckBox checkBox2("显示尺寸(mm)");
+	checkBox2.setChecked(isCoordinateSystemSizeShown);
+	form.addRow(&checkBox2);
+
+	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+		Qt::Horizontal, &dialog);
+	form.addRow(&buttonBox);
+	QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+	QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+
+	if (dialog.exec() == QDialog::Rejected) {
+		return;
+	}
+
+	pointViewerSize = pointSizeBox.value();
+	backGroundColor[0] = r.value();
+	backGroundColor[1] = g.value();
+	backGroundColor[2] = b.value();
+	isCoordinateSystemShown = checkBox1.isChecked();
+	isCoordinateSystemSizeShown = checkBox2.isChecked();
+	coordinateSystemSize = coordSizeBox.value();
+
+	// Set point size
+	int cloudSize = pointCloudVector->GetSize();
+	for (int i = 0; i < cloudSize; ++i) {
+		PointCloudVisualization* pcv = pointCloudVector->GetPCVofIdx(i);
+		pcv->SetPointSize(pointViewerSize);
+	}
+
+	viewer->setBackgroundColor(backGroundColor[0] / 255.0, backGroundColor[1] / 255.0, backGroundColor[2] / 255.0);
+	if (isCoordinateSystemShown) {
+		viewer->addCoordinateSystem(coordinateSystemSize);
+	}
+	else {
+		viewer->removeCoordinateSystem();
+	}
+
+}
 
 void PointCloudLab::on_pushButton_clicked() {
 	cout << "complete cloud size: " << completeCloud->GetCloudSize() << endl;

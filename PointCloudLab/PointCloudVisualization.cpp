@@ -10,7 +10,7 @@ void PointCloudVisualization::Show() {
 	cout << "Display - " << id << endl;
 	SetColor(red, green, blue);
 	SetPointSize(pointSize);
-
+	viewer->removePointCloud(id);
 	viewer->addPointCloud(cloud, id);
 	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, pointSize, id);
 
@@ -35,7 +35,21 @@ void PointCloudVisualization::Delete() {
 
 void PointCloudVisualization::AddCloud(PointCloudT::Ptr newCloud) {
 	*cloud += *newCloud;
+	cloudSize = cloud->size();
 }
+
+void PointCloudVisualization::DeletePointFromVector(const unordered_set<int> &setSelected) {
+	PointCloudT::Ptr tempCloud(new PointCloudT());
+	for (int i = 0; i < cloudSize; ++i) {
+		if (setSelected.count(i) == 0) {
+			tempCloud->push_back(cloud->points.at(i));
+		}
+	}
+	cloud.swap(tempCloud);
+	Show();
+	cloudSize = cloud->size();
+}
+
 
 void PointCloudVisualization::SetColor(const int r, const int g, const int b) {
 	red = r;

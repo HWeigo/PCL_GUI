@@ -13,6 +13,7 @@
 #include <vtkRenderWindow.h>
 
 #include <vector>
+#include <unordered_set>
 
 typedef pcl::PointXYZRGBA PointT;
 typedef pcl::PointCloud<PointT> PointCloudT;
@@ -28,11 +29,11 @@ private:
 	int backIdx;
 	int cloudSize;
 
-	int pointSize = 0.5;
+	int pointSize = 3;
 	int red = 255;
 	int green = 255;
 	int blue = 255;
-	bool isShown = true;
+	bool isShown = false;
 
 
 public:
@@ -51,6 +52,7 @@ public:
 	void SetPointSize(const int sz);
 	bool IsShown() { return isShown; };
 	void AddCloud(PointCloudT::Ptr newCloud);
+	void DeletePointFromVector(const unordered_set<int> &setSelected);
 	void Save(string filepath);
 	void Delete();
 

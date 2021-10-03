@@ -29,7 +29,7 @@ void PointCloudVector::DeletePointCloud(const int idx) {
 }
 
 bool PointCloudVector::IsValid(const int idx) {
-	return (idx < size) && isValid[idx];
+	return (idx >= 0) && (idx < size) && isValid[idx];
 }
 
 bool PointCloudVector::IsShown(const int idx) {
