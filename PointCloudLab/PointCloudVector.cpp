@@ -7,7 +7,7 @@ viewer(viewer_in)
 {
 }
 
-void PointCloudVector::AddPointCloud(PointCloudT::Ptr cloud, string id) {
+int PointCloudVector::AddPointCloud(PointCloudT::Ptr cloud, string id) {
 	PointCloudVisualization* pcv = new PointCloudVisualization(viewer, cloud, id);
 	pcvVector.push_back(pcv);
 	isValid.push_back(true);
@@ -15,10 +15,16 @@ void PointCloudVector::AddPointCloud(PointCloudT::Ptr cloud, string id) {
 	nextStartIdx = nextStartIdx + pcv->GetCloudSize();
 	size = pcvVector.size();
 	assert((size == isValid.size()) && (size == idxRange.size()));
+	return size - 1;
 }
 
 void PointCloudVector::DeletePointCloud(const int idx) {
 	// Todo: release memory!!
+	if (idx >= size)
+		return;
+	
+	// Reset size
+
 
 	isValid[idx] = false;
 }

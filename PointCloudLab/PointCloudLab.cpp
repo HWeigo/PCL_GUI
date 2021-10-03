@@ -21,6 +21,9 @@ PointCloudLab::PointCloudLab(QWidget *parent)
     InitVtk();
     InitPointTree();
     InitMenuAction();
+
+	// Init PointCloudVector
+	pointCloudVector = new PointCloudVector(viewer);
 }
 PointCloudLab::~PointCloudLab()
 {
@@ -162,8 +165,10 @@ int PointCloudLab::OpenPcdFile(string path)
     }
     vector<string> tempId = PointCloudLab::split(path, "/");
     string id = tempId.back();
-    PointCloudVisualization *pcv = new PointCloudVisualization(viewer, cloud, id);
-    cloudVisualVector.push_back(pcv);
+	int idx = pointCloudVector->AddPointCloud(cloud, id);
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(idx);
+    //PointCloudVisualization *pcv = new PointCloudVisualization(viewer, cloud, id);
+    //cloudVisualVector.push_back(pcv);
     pcv->Show();
     viewer->resetCamera();
     ui.qvtkWidget->update();
@@ -282,7 +287,9 @@ void PointCloudLab::OnShowAction()
     if (isShown[curPointsId])
         return;
     //todo ÏÔÊ¾µãÔÆ
-	PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	//PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(curPointsId);
+	assert(pcv != nullptr);
 	pcv->Show();
 	ui.qvtkWidget->update();
 
@@ -300,7 +307,9 @@ void PointCloudLab::OnHideAction()
     if (!isShown[curPointsId])
         return;
 
-	PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	//PointCloudVisualization *pcv = cloudVisualVector[curPointsId];
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(curPointsId);
+	assert(pcv != nullptr);
 	pcv->Hide();
 	ui.qvtkWidget->update();
    

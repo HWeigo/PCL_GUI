@@ -22,6 +22,7 @@
 #include "ui_PointCloudLab.h"
 
 #include "PointCloudVisualization.h"
+#include "PointCloudVector.h"
 #include "PointTree.h"
 
 using std::string;
@@ -76,6 +77,7 @@ private:
 protected:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
 	vector<PointCloudVisualization*> cloudVisualVector;
+	PointCloudVector* pointCloudVector;
     vector<PointTree*> PointCloudTree;
     vector<bool> isDeleted;
     vector<bool> isShown;

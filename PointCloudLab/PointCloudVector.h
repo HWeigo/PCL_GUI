@@ -17,7 +17,7 @@ public:
 	PointCloudVector(boost::shared_ptr<pcl::visualization::PCLVisualizer>);
 	~PointCloudVector() {};
 
-	void AddPointCloud(PointCloudT::Ptr, string);
+	int AddPointCloud(PointCloudT::Ptr, string);
 	void DeletePointCloud(const int idx);
 	bool IsValid(const int idx);
 	int GetCompleteCloudSize();
