@@ -8,7 +8,7 @@ PointCloudVisualization::PointCloudVisualization(boost::shared_ptr<pcl::visualiz
 void PointCloudVisualization::Show() {
 	isShown = true;
 	cout << "Display - " << id << endl;
-	SetColor(255, 255, 255);
+	SetColor(red, green, blue);
 	SetPointSize(3);
 
 	viewer->addPointCloud(cloud, id);

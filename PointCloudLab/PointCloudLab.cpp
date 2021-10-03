@@ -320,6 +320,7 @@ void PointCloudLab::OnHideAction()
 }
 void PointCloudLab::OnDeleteAction()
 {
+	// Todo: Release memory in point cloud vector
     if (PointCloudTree[curPointsId] != nullptr) {
         delete PointCloudTree[curPointsId];
         PointCloudTree[curPointsId] = nullptr;
@@ -331,6 +332,36 @@ void PointCloudLab::OnDeleteAction()
 void PointCloudLab::OnSetColorAction()
 {
     cout << "set color " << curPointsId << endl;
+	QDialog dialog(this);
+	dialog.setFixedSize(300, 200);
+	dialog.setWindowTitle("ÉèÖÃÑÕÉ«");
+	QFormLayout form(&dialog);
+
+
+	QSpinBox rBox, gBox, bBox;
+	rBox.setRange(0, 255);
+	gBox.setRange(0, 255);
+	bBox.setRange(0, 255);
+
+	form.addRow(QString("R=: "), &rBox);
+	form.addRow(QString("G=: "), &gBox);
+	form.addRow(QString("B=: "), &bBox);
+
+	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+		Qt::Horizontal, &dialog);
+	form.addRow(&buttonBox);
+	QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+	QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+	if (dialog.exec() == QDialog::Accepted) {
+		cout << "set color =R:" << rBox.value() << endl;
+		cout << "set color =G:" << gBox.value() << endl;
+		cout << "set color =B:" << bBox.value() << endl;
+
+		PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(curPointsId);
+		pcv->SetColor(rBox.value(), gBox.value(), bBox.value());
+	}
+
 }
 
 
