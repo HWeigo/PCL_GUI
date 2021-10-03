@@ -44,9 +44,10 @@ public:
 	vector<int> GetColor();
 	int GetPointSize();
 	int GetCloudSize();
+	PointCloudT::Ptr GetCloudPtr();
 
-	void SetColor(int r, int g, int b);
-	void SetPointSize(int sz);
+	void SetColor(const int r, const int g, const int b);
+	void SetPointSize(const int sz);
 	bool IsShown() { return isShown; };
 
 

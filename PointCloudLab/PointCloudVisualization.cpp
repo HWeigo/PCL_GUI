@@ -19,11 +19,13 @@ void PointCloudVisualization::Show() {
 
 void PointCloudVisualization::Hide() {
 	isShown = false;
+	cout << "Hide - " << id << endl;
+
 
 	viewer->removePointCloud(id);
 }
 
-void PointCloudVisualization::SetColor(int r, int g, int b) {
+void PointCloudVisualization::SetColor(const int r, const int g, const int b) {
 	red = r;
 	green = g;
 	blue = b;
@@ -37,7 +39,7 @@ void PointCloudVisualization::SetColor(int r, int g, int b) {
 	viewer->updatePointCloud(cloud, id);
 }
 
-void PointCloudVisualization::SetPointSize(int sz) {
+void PointCloudVisualization::SetPointSize(const int sz) {
 	pointSize = sz;
 	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, pointSize, id);
 
@@ -60,6 +62,11 @@ int PointCloudVisualization::GetPointSize() {
 int PointCloudVisualization::GetCloudSize() {
 	return cloudSize;
 }
+
+PointCloudT::Ptr PointCloudVisualization::GetCloudPtr() {
+	return cloud;
+}
+
 
 
 

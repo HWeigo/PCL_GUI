@@ -37,3 +37,14 @@ pair<int, int> PointCloudVector::GetRangeInCompleteCloud(const int idx) {
 	return idxRange[idx];
 }
 
+PointCloudT::Ptr PointCloudVector::GetCloudPtrOfIdx(const int idx) {
+	if (idx >= size)
+		return nullptr;
+	return pcvVector[idx]->GetCloudPtr();
+}
+
+PointCloudVisualization* PointCloudVector::GetPCVofIdx(const int idx) {
+	if (idx >= size)
+		return nullptr;
+	return pcvVector[idx];
+}

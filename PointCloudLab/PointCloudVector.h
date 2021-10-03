@@ -22,6 +22,8 @@ public:
 	bool IsValid(const int idx);
 	int GetCompleteCloudSize();
 	pair<int, int> GetRangeInCompleteCloud(const int idx);
+	PointCloudT::Ptr GetCloudPtrOfIdx(const int idx);
+	PointCloudVisualization* GetPCVofIdx(const int idx);
 	
 };
 
