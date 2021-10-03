@@ -3,12 +3,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 
 // Qt
 #include <QMainWindow>
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QColorDialog>
+
 // Point Cloud Library
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
@@ -46,13 +50,34 @@ public:
     ~PointCloudLab();
 
 private:
+	boost::mutex cloud_mutex;
+	PointCloudT::Ptr clicked_points_3d;
+	int selectedCloudIdx = -1;
+	vector<int> selectedPointIdxs;
+	unordered_set<int> setSelected;
+
+	typedef enum {
+		DRAG = 0,
+		POINT_PICK = 1,
+		AREA_PICK = 2
+	} MOTION_STATE;
+
+	int motionState = DRAG;
+
     Ui::PointCloudLabClass ui;
+
+	enum {
+		SUCCESS,
+		FAILED,
+		CANCEL
+	};
 
     QMenu *treeMenu;
     QAction *showAction;
     QAction *hideAction;
     QAction *deleteAction;
-    QAction *setColorAction;
+	QAction *setColorAction;
+	QAction *saveCurPointAction;
     int curPointsId = -1;
 
 
@@ -72,11 +97,18 @@ private:
     int OpenStlFile(string path);
     int OpenMeshFile(string path);
     int OpenPngFile(string path);
+	vector<int> GetValidPointsId();
 
+
+	void PointPicking();
+	void AreaPicking();
+	static void point_callback(const pcl::visualization::PointPickingEvent& event, void* args);
+	static void area_callback(const pcl::visualization::AreaPickingEvent& event, void *args);
 
 protected:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-	vector<PointCloudVisualization*> cloudVisualVector;
+	PointCloudVisualization* completeCloud = nullptr;
+	PointCloudVisualization* selectedCloud = nullptr;
 	PointCloudVector* pointCloudVector;
     vector<PointTree*> PointCloudTree;
     vector<bool> isDeleted;
@@ -94,4 +126,12 @@ public slots:
     void OnHideAction();
     void OnDeleteAction();
     void OnSetColorAction();
+	void OnSaveCurPointAction();
+
+	void on_pushButton_pointPick_clicked();
+	void on_pushButton_areaPick_clicked();
+	void on_pushButton_drag_clicked();
+	void on_pushButton_clicked();
+	void on_pushButton_allSelect_clicked();
+	void on_pushButton_invertSelect_clicked();
 };

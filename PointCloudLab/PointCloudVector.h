@@ -20,10 +20,12 @@ public:
 	int AddPointCloud(PointCloudT::Ptr, string);
 	void DeletePointCloud(const int idx);
 	bool IsValid(const int idx);
+	bool IsShown(const int idx);
+	int GetSize();
 	int GetCompleteCloudSize();
 	pair<int, int> GetRangeInCompleteCloud(const int idx);
 	PointCloudT::Ptr GetCloudPtrOfIdx(const int idx);
 	PointCloudVisualization* GetPCVofIdx(const int idx);
-	
+	string GetId(const int idx);
 };
 

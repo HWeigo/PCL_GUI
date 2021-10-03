@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -20,6 +21,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -38,9 +41,22 @@ public:
     QAction *filterAction3;
     QAction *copyPointAction;
     QAction *extractPointAction;
+    QAction *actionjkj;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QWidget *widget_3;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *pushButton_drag;
+    QFrame *line_3;
+    QPushButton *pushButton_pointPick;
+    QPushButton *pushButton_areaPick;
+    QCheckBox *checkBox_undo;
+    QPushButton *pushButton_allSelect;
+    QPushButton *pushButton_invertSelect;
+    QFrame *line_4;
+    QPushButton *pushButton_setting;
+    QPushButton *pushButton;
+    QSpacerItem *horizontalSpacer;
     QFrame *line_2;
     QWidget *widget_2;
     QHBoxLayout *horizontalLayout;
@@ -83,6 +99,8 @@ public:
         copyPointAction->setObjectName(QStringLiteral("copyPointAction"));
         extractPointAction = new QAction(PointCloudLabClass);
         extractPointAction->setObjectName(QStringLiteral("extractPointAction"));
+        actionjkj = new QAction(PointCloudLabClass);
+        actionjkj->setObjectName(QStringLiteral("actionjkj"));
         centralWidget = new QWidget(PointCloudLabClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -94,6 +112,69 @@ public:
         widget_3->setObjectName(QStringLiteral("widget_3"));
         widget_3->setMinimumSize(QSize(0, 30));
         widget_3->setMaximumSize(QSize(16777215, 30));
+        horizontalLayout_3 = new QHBoxLayout(widget_3);
+        horizontalLayout_3->setSpacing(5);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
+        pushButton_drag = new QPushButton(widget_3);
+        pushButton_drag->setObjectName(QStringLiteral("pushButton_drag"));
+
+        horizontalLayout_3->addWidget(pushButton_drag);
+
+        line_3 = new QFrame(widget_3);
+        line_3->setObjectName(QStringLiteral("line_3"));
+        line_3->setFrameShape(QFrame::VLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_3->addWidget(line_3);
+
+        pushButton_pointPick = new QPushButton(widget_3);
+        pushButton_pointPick->setObjectName(QStringLiteral("pushButton_pointPick"));
+
+        horizontalLayout_3->addWidget(pushButton_pointPick);
+
+        pushButton_areaPick = new QPushButton(widget_3);
+        pushButton_areaPick->setObjectName(QStringLiteral("pushButton_areaPick"));
+
+        horizontalLayout_3->addWidget(pushButton_areaPick);
+
+        checkBox_undo = new QCheckBox(widget_3);
+        checkBox_undo->setObjectName(QStringLiteral("checkBox_undo"));
+
+        horizontalLayout_3->addWidget(checkBox_undo);
+
+        pushButton_allSelect = new QPushButton(widget_3);
+        pushButton_allSelect->setObjectName(QStringLiteral("pushButton_allSelect"));
+
+        horizontalLayout_3->addWidget(pushButton_allSelect);
+
+        pushButton_invertSelect = new QPushButton(widget_3);
+        pushButton_invertSelect->setObjectName(QStringLiteral("pushButton_invertSelect"));
+
+        horizontalLayout_3->addWidget(pushButton_invertSelect);
+
+        line_4 = new QFrame(widget_3);
+        line_4->setObjectName(QStringLiteral("line_4"));
+        line_4->setFrameShape(QFrame::VLine);
+        line_4->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_3->addWidget(line_4);
+
+        pushButton_setting = new QPushButton(widget_3);
+        pushButton_setting->setObjectName(QStringLiteral("pushButton_setting"));
+
+        horizontalLayout_3->addWidget(pushButton_setting);
+
+        pushButton = new QPushButton(widget_3);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        horizontalLayout_3->addWidget(pushButton);
+
+        horizontalSpacer = new QSpacerItem(885, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer);
+
 
         verticalLayout->addWidget(widget_3);
 
@@ -113,6 +194,7 @@ public:
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         qvtkWidget = new QVTKWidget(widget_2);
         qvtkWidget->setObjectName(QStringLiteral("qvtkWidget"));
+        qvtkWidget->setFocusPolicy(Qt::StrongFocus);
 
         horizontalLayout->addWidget(qvtkWidget);
 
@@ -177,7 +259,7 @@ public:
         PointCloudLabClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PointCloudLabClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1280, 37));
+        menuBar->setGeometry(QRect(0, 0, 1280, 26));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuFilter = new QMenu(menuBar);
@@ -225,6 +307,15 @@ public:
         filterAction3->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
         copyPointAction->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
         extractPointAction->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        actionjkj->setText(QApplication::translate("PointCloudLabClass", "jkj", Q_NULLPTR));
+        pushButton_drag->setText(QApplication::translate("PointCloudLabClass", "Drag", Q_NULLPTR));
+        pushButton_pointPick->setText(QApplication::translate("PointCloudLabClass", "PointPick", Q_NULLPTR));
+        pushButton_areaPick->setText(QApplication::translate("PointCloudLabClass", "AreaPick", Q_NULLPTR));
+        checkBox_undo->setText(QApplication::translate("PointCloudLabClass", "Undo", Q_NULLPTR));
+        pushButton_allSelect->setText(QApplication::translate("PointCloudLabClass", "AllSelect", Q_NULLPTR));
+        pushButton_invertSelect->setText(QApplication::translate("PointCloudLabClass", "InvertSelect", Q_NULLPTR));
+        pushButton_setting->setText(QApplication::translate("PointCloudLabClass", "Setting", Q_NULLPTR));
+        pushButton->setText(QApplication::translate("PointCloudLabClass", "TestButt", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("PointCloudLabClass", "\346\211\223\345\274\200\347\232\204\347\202\271\344\272\221", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "\350\276\223\345\207\272", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("PointCloudLabClass", "File", Q_NULLPTR));

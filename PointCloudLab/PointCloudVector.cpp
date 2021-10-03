@@ -24,8 +24,7 @@ void PointCloudVector::DeletePointCloud(const int idx) {
 		return;
 	
 	// Reset size
-
-
+	pcvVector[idx]->Delete();
 	isValid[idx] = false;
 }
 
@@ -33,24 +32,35 @@ bool PointCloudVector::IsValid(const int idx) {
 	return (idx < size) && isValid[idx];
 }
 
+bool PointCloudVector::IsShown(const int idx) {
+	return (idx < size) && pcvVector[idx]->IsShown();
+}
+
+int PointCloudVector::GetSize() {
+	return size;
+}
+
 int PointCloudVector::GetCompleteCloudSize() {
+	// Todo: ERROR
 	return nextStartIdx;
 }
 
 pair<int, int> PointCloudVector::GetRangeInCompleteCloud(const int idx) {
-	if (idx >= size)
-		return{ -1, -1 };
+	assert(idx >= size || idx < 0);
 	return idxRange[idx];
 }
 
 PointCloudT::Ptr PointCloudVector::GetCloudPtrOfIdx(const int idx) {
-	if (idx >= size)
-		return nullptr;
+	assert(idx >= size || idx < 0);
 	return pcvVector[idx]->GetCloudPtr();
 }
 
 PointCloudVisualization* PointCloudVector::GetPCVofIdx(const int idx) {
-	if (idx >= size)
-		return nullptr;
+	assert(idx >= size || idx < 0);
 	return pcvVector[idx];
+}
+
+string PointCloudVector::GetId(const int idx) {
+	assert(idx >= size || idx < 0);
+	return pcvVector[idx]->GetId();
 }

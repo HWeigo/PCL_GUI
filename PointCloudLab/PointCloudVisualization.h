@@ -28,7 +28,7 @@ private:
 	int backIdx;
 	int cloudSize;
 
-	int pointSize = 3;
+	int pointSize = 0.5;
 	int red = 255;
 	int green = 255;
 	int blue = 255;
@@ -45,10 +45,13 @@ public:
 	int GetPointSize();
 	int GetCloudSize();
 	PointCloudT::Ptr GetCloudPtr();
+	string GetId();
 
 	void SetColor(const int r, const int g, const int b);
 	void SetPointSize(const int sz);
 	bool IsShown() { return isShown; };
-
+	void AddCloud(PointCloudT::Ptr newCloud);
+	void Save(string filepath);
+	void Delete();
 
 };

@@ -50,6 +50,106 @@
         <height>30</height>
        </size>
       </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="pushButton_drag">
+         <property name="text">
+          <string>Drag</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_pointPick">
+         <property name="text">
+          <string>PointPick</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_areaPick">
+         <property name="text">
+          <string>AreaPick</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_undo">
+         <property name="text">
+          <string>Undo</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_allSelect">
+         <property name="text">
+          <string>AllSelect</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_invertSelect">
+         <property name="text">
+          <string>InvertSelect</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_setting">
+         <property name="text">
+          <string>Setting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>TestButt</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>885</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
@@ -78,7 +178,11 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QVTKWidget" name="qvtkWidget"/>
+        <widget class="QVTKWidget" name="qvtkWidget">
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="Line" name="line">
@@ -201,7 +305,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>37</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -288,6 +392,11 @@
   <action name="extractPointAction">
    <property name="text">
     <string>提取所选点云</string>
+   </property>
+  </action>
+  <action name="actionjkj">
+   <property name="text">
+    <string>jkj</string>
    </property>
   </action>
  </widget>
