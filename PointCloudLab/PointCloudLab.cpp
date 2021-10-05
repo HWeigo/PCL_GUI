@@ -606,9 +606,11 @@ void PointCloudLab::on_copyPointAction_triggered(bool checked)
 	PointCloudTree.push_back(tempTree);
 
 	PointCloudTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
-	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
 	PointCloudTree[idx]->pointsSize->setTextColor(0, QColor(150, 150, 150));
 	PointCloudTree[idx]->faceSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->pointsSize->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->faceSize->setTextColor(1, QColor(150, 150, 150));
 	
 	motionState = DRAG;
 	ui.qvtkWidget->setFocus();
@@ -635,9 +637,11 @@ void PointCloudLab::on_extractPointAction_triggered(bool checked)
 	PointCloudTree.push_back(tempTree);
 
 	PointCloudTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
-	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
 	PointCloudTree[idx]->pointsSize->setTextColor(0, QColor(150, 150, 150));
 	PointCloudTree[idx]->faceSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[idx]->cloudName->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->pointsSize->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[idx]->faceSize->setTextColor(1, QColor(150, 150, 150));
 
 	motionState = DRAG;
 	ui.qvtkWidget->setFocus();
@@ -672,9 +676,11 @@ void PointCloudLab::OnShowAction()
 
 
     PointCloudTree[curPointsId]->cloudName->setTextColor(0, QColor(0, 0, 0));
-	PointCloudTree[curPointsId]->cloudName->setTextColor(1, QColor(0, 0, 0));
 	PointCloudTree[curPointsId]->pointsSize->setTextColor(0, QColor(0, 0, 0));
-    PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(0, 0, 0));
+	PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(0, 0, 0));
+	PointCloudTree[curPointsId]->cloudName->setTextColor(1, QColor(0, 0, 0));
+	PointCloudTree[curPointsId]->pointsSize->setTextColor(1, QColor(0, 0, 0));
+    PointCloudTree[curPointsId]->faceSize->setTextColor(1, QColor(0, 0, 0));
 }
 void PointCloudLab::OnHideAction()
 {
@@ -690,9 +696,11 @@ void PointCloudLab::OnHideAction()
 	ui.qvtkWidget->update();
    
     PointCloudTree[curPointsId]->cloudName->setTextColor(0, QColor(150, 150, 150));
-	PointCloudTree[curPointsId]->cloudName->setTextColor(1, QColor(150, 150, 150));
 	PointCloudTree[curPointsId]->pointsSize->setTextColor(0, QColor(150, 150, 150));
-    PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[curPointsId]->faceSize->setTextColor(0, QColor(150, 150, 150));
+	PointCloudTree[curPointsId]->cloudName->setTextColor(1, QColor(150, 150, 150));
+	PointCloudTree[curPointsId]->pointsSize->setTextColor(1, QColor(150, 150, 150));
+    PointCloudTree[curPointsId]->faceSize->setTextColor(1, QColor(150, 150, 150));
 }
 void PointCloudLab::OnDeleteAction()
 {
@@ -996,9 +1004,11 @@ void PointCloudLab::on_pushButton_pointPick_clicked() {
 			ui.qvtkWidget->update();
 
 			PointCloudTree[i]->cloudName->setTextColor(0, QColor(0, 0, 0));
-			PointCloudTree[i]->cloudName->setTextColor(1, QColor(0, 0, 0));
 			PointCloudTree[i]->pointsSize->setTextColor(0, QColor(0, 0, 0));
 			PointCloudTree[i]->faceSize->setTextColor(0, QColor(0, 0, 0));
+			PointCloudTree[i]->cloudName->setTextColor(1, QColor(0, 0, 0));
+			PointCloudTree[i]->pointsSize->setTextColor(1, QColor(0, 0, 0));
+			PointCloudTree[i]->faceSize->setTextColor(1, QColor(0, 0, 0));
 			continue;
 		}
 		if (pointCloudVector->IsShown(i)) {
@@ -1008,9 +1018,11 @@ void PointCloudLab::on_pushButton_pointPick_clicked() {
 			ui.qvtkWidget->update();
 
 			PointCloudTree[i]->cloudName->setTextColor(0, QColor(150, 150, 150));
-			PointCloudTree[i]->cloudName->setTextColor(1, QColor(150, 150, 150));
 			PointCloudTree[i]->pointsSize->setTextColor(0, QColor(150, 150, 150));
 			PointCloudTree[i]->faceSize->setTextColor(0, QColor(150, 150, 150));
+			PointCloudTree[i]->cloudName->setTextColor(1, QColor(150, 150, 150));
+			PointCloudTree[i]->pointsSize->setTextColor(1, QColor(150, 150, 150));
+			PointCloudTree[i]->faceSize->setTextColor(1, QColor(150, 150, 150));
 		}
 	}
 	motionState = POINT_PICK;
@@ -1073,9 +1085,11 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 			ui.qvtkWidget->update();
 
 			PointCloudTree[i]->cloudName->setTextColor(0, QColor(0, 0, 0));
-			PointCloudTree[i]->cloudName->setTextColor(1, QColor(0, 0, 0));
 			PointCloudTree[i]->pointsSize->setTextColor(0, QColor(0, 0, 0));
 			PointCloudTree[i]->faceSize->setTextColor(0, QColor(0, 0, 0));
+			PointCloudTree[i]->cloudName->setTextColor(1, QColor(0, 0, 0));
+			PointCloudTree[i]->pointsSize->setTextColor(1, QColor(0, 0, 0));
+			PointCloudTree[i]->faceSize->setTextColor(1, QColor(0, 0, 0));
 			continue;
 		}
 		if (pointCloudVector->IsShown(i)) {
@@ -1085,9 +1099,11 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 			ui.qvtkWidget->update();
 
 			PointCloudTree[i]->cloudName->setTextColor(0, QColor(150, 150, 150));
-			PointCloudTree[i]->cloudName->setTextColor(1, QColor(150, 150, 150));
 			PointCloudTree[i]->pointsSize->setTextColor(0, QColor(150, 150, 150));
 			PointCloudTree[i]->faceSize->setTextColor(0, QColor(150, 150, 150));
+			PointCloudTree[i]->cloudName->setTextColor(1, QColor(150, 150, 150));
+			PointCloudTree[i]->pointsSize->setTextColor(1, QColor(150, 150, 150));
+			PointCloudTree[i]->faceSize->setTextColor(1, QColor(150, 150, 150));
 		}
 	}
 

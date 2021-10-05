@@ -12,8 +12,16 @@ PointTree::PointTree(Ui::PointCloudLabClass *input_ui, string filePath, std::str
 
 	cloudName = new QTreeWidgetItem(ui->treeWidget, tempList);
 	cloudName->setFlags(cloudName->flags() &(~Qt::ItemIsEditable));
-	pointsSize = new QTreeWidgetItem(cloudName, QStringList(QString("泣方: ") + QString::number(pointNum)));
-	faceSize = new QTreeWidgetItem(cloudName, QStringList(QString("中方: ") + QString::number(faceNum)));
+	
+	QStringList tempList_sub1;
+	tempList_sub1.push_back(QString("泣方: "));
+	tempList_sub1.push_back(QString::number(pointNum));
+	pointsSize = new QTreeWidgetItem(cloudName, tempList_sub1);
+
+	QStringList tempList_sub2;
+	tempList_sub2.push_back(QString("中方: "));
+	tempList_sub2.push_back(QString::number(faceNum));
+	faceSize = new QTreeWidgetItem(cloudName, tempList_sub2);
 }
 PointTree::~PointTree()
 {
