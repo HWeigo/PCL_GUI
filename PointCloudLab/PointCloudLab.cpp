@@ -684,6 +684,7 @@ void PointCloudLab::OnSaveCurPointAction()
 	if (fileType == "pcd" || fileType == "ply" || fileType == "obj" || fileType == "stl" || fileType == "mesh")
 	{
 		//To do
+		pointCloudVector->SavePointCloudOfIdx(filePath, curPointsId);
 
 	}
 	else if (fileType == "png")

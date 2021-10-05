@@ -2,6 +2,11 @@
 
 PointCloudVisualization::PointCloudVisualization(boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer_in, \
 	PointCloudT::Ptr cloud_in, string id_in) : viewer(viewer_in), cloud(cloud_in), id(id_in) {
+	
+	cloud->height = (cloud->height == 0) ? 1 :cloud->height;
+	cloud->width = (cloud->width == 0) ? cloud->size() : cloud->height;
+
+	
 	cloudSize = cloud->size();
 }
 

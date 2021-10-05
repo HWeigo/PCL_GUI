@@ -27,5 +27,7 @@ public:
 	PointCloudT::Ptr GetCloudPtrOfIdx(const int idx);
 	PointCloudVisualization* GetPCVofIdx(const int idx);
 	string GetId(const int idx);
+	void SavePointCloudOfIdx(string filepath, const int idx);
+
 };
 
