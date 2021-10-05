@@ -418,22 +418,49 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 	cout << "validPoints[0]=" << validPoints[0] << endl;
 	cout << "select  point :" << validPoints[curComboBox.currentIndex()] << endl;
 
-	if (checkBoxX.isChecked()) {
-		cout << "X is checked\n";
-	}
-	if (checkBoxY.isChecked()) {
-		cout << "Y is checked\n";
-	}
-	if (checkBoxZ.isChecked()) {
-		cout << "Z is checked\n";
-	}
 	QString minStr = textMin.text();
 	QString maxStr = textMax.text();
 	double minVal = minStr.toDouble();
 	double maxVal = maxStr.toDouble();
 	cout << "min =" << minVal << endl;
 	cout << "max =" << maxVal << endl;
+
+	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
+	PointCloudT::Ptr selectedCloud = pointCloudVector->GetCloudPtrOfIdx(selectedCloudIdx);
+
+	if (checkBoxX.isChecked()) {
+		cout << "X is checked\n";
+		pcl::PassThrough<PointT> pass;//设置滤波器对象
+		pass.setFilterFieldName("x");
+		pass.setFilterLimits(minVal, maxVal);
+		pass.setInputCloud(selectedCloud);
+		pass.filter(*selectedCloud);
+	}
+	if (checkBoxY.isChecked()) {
+		cout << "Y is checked\n";
+		pcl::PassThrough<PointT> pass;//设置滤波器对象
+		pass.setFilterFieldName("y");
+		pass.setFilterLimits(minVal, maxVal);
+		pass.setInputCloud(selectedCloud);
+		pass.filter(*selectedCloud);
+	}
+	if (checkBoxZ.isChecked()) {
+		cout << "Z is checked\n";
+		pcl::PassThrough<PointT> pass;//设置滤波器对象
+		pass.setFilterFieldName("y");
+		pass.setFilterLimits(minVal, maxVal);
+		pass.setInputCloud(selectedCloud);
+		pass.filter(*selectedCloud);
+	}
+	// Filter Here
+
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(selectedCloudIdx);
+	pcv->Show();
+	ui.qvtkWidget->update();
+	
+	PushMessage("直通滤波");
 }//直通滤波
+
 void PointCloudLab::on_filterAction2_triggered(bool checked)
 {
 	cout << "体素滤波\n";
@@ -446,7 +473,7 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 	}
 
 	QDialog dialog(this);
-	dialog.setFixedSize(200, 200);
+	dialog.setFixedSize(300, 200);
 	dialog.setWindowTitle("体素滤波参数设置");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
@@ -456,17 +483,17 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 	form.addRow(QString("选择滤波点云："), &curComboBox);
 	QLabel tempLabel("体素大小设置:");
 	form.addRow(&tempLabel);
-	QLineEdit x, y, z;
+	QLineEdit xQLine, yQLine, zQLine;
 	QDoubleValidator aDoubleValidator;
-	x.setValidator(&aDoubleValidator);
-	y.setValidator(&aDoubleValidator);
-	z.setValidator(&aDoubleValidator);
-	x.setText("0");
-	y.setText("0");
-	z.setText("0");
-	form.addRow(QString("    x= "), &x);
-	form.addRow(QString("    y="), &y);
-	form.addRow(QString("    z="), &z);
+	xQLine.setValidator(&aDoubleValidator);
+	yQLine.setValidator(&aDoubleValidator);
+	zQLine.setValidator(&aDoubleValidator);
+	xQLine.setText("0");
+	yQLine.setText("0");
+	zQLine.setText("0");
+	form.addRow(QString("    x= "), &xQLine);
+	form.addRow(QString("    y="), &yQLine);
+	form.addRow(QString("    z="), &zQLine);
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
 	form.addRow(&buttonBox);
@@ -478,11 +505,29 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 		return;
 	}
 
-}
-//体素滤波
+	QString xStr = xQLine.text();
+	QString yStr = yQLine.text();
+	QString zStr = zQLine.text();
+	double x = xStr.toDouble();
+	double y = yStr.toDouble();
+	double z = zStr.toDouble();
+
+	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
+	PointCloudT::Ptr selectedCloud = pointCloudVector->GetCloudPtrOfIdx(selectedCloudIdx);
+	pcl::VoxelGrid<PointT> sor;
+	sor.setInputCloud(selectedCloud);
+	sor.setLeafSize(x, y, z); 
+	sor.filter(*selectedCloud);
+
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(selectedCloudIdx);
+	pcv->Show();
+	ui.qvtkWidget->update();
+
+	PushMessage("体素滤波");
+}//体素滤波
+
 void PointCloudLab::on_filterAction3_triggered(bool checked)
 {
-	cout << "体素滤波\n";
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
@@ -492,7 +537,7 @@ void PointCloudLab::on_filterAction3_triggered(bool checked)
 	}
 
 	QDialog dialog(this);
-	dialog.setFixedSize(200, 200);
+	dialog.setFixedSize(300, 200);
 	dialog.setWindowTitle("统计滤波参数设置");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
@@ -523,7 +568,26 @@ void PointCloudLab::on_filterAction3_triggered(bool checked)
 	if (dialog.exec() == QDialog::Rejected) {
 		return;
 	}
-	cout << "统计滤波\n";
+
+	QString meanKStr = neighbourNum.text();
+	QString stdStr = standerDif.text();
+	double meanK = meanKStr.toDouble();
+	double std = stdStr.toDouble();
+
+	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
+	PointCloudT::Ptr selectedCloud = pointCloudVector->GetCloudPtrOfIdx(selectedCloudIdx);
+	pcl::StatisticalOutlierRemoval<PointT> Static;   
+	Static.setInputCloud(selectedCloud);   
+	Static.setMeanK(150);                               
+	Static.setStddevMulThresh(0.5);                      
+	Static.filter(*selectedCloud);                    
+
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(selectedCloudIdx);
+	pcv->Show();
+	ui.qvtkWidget->update();
+
+	PushMessage("统计滤波");
+
 }//统计滤波
 
 
@@ -553,7 +617,9 @@ void PointCloudLab::on_copyPointAction_triggered(bool checked)
 	QKeyEvent keyRelease(QEvent::KeyRelease, Qt::Key_X, Qt::NoModifier);
 	QCoreApplication::sendEvent(ui.qvtkWidget, &keyPress);
 	QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
+	PushMessage("复制点云完成");
 }//复制点云
+
 void PointCloudLab::on_extractPointAction_triggered(bool checked)
 {
     cout << "提取点云\n";
@@ -587,7 +653,7 @@ void PointCloudLab::on_extractPointAction_triggered(bool checked)
 	ui.qvtkWidget->update();
 
 	PointCloudTree[selectedCloudIdx]->pointsSize->setText(0, QString("点数: ") + QString::number(pcv->GetCloudSize()));
-
+	PushMessage("提取点云完成");
 }//提取点云
 
 

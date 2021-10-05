@@ -18,6 +18,10 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/statistical_outlier_removal.h>
+
 
 // Visualization Toolkit (VTK)
 #include <vtkRenderWindow.h>
@@ -109,6 +113,8 @@ private:
 	void AreaPicking();
 	static void point_callback(const pcl::visualization::PointPickingEvent& event, void* args);
 	static void area_callback(const pcl::visualization::AreaPickingEvent& event, void *args);
+
+
 
 protected:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
