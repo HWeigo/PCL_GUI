@@ -116,7 +116,12 @@ void PointCloudLab::InitVtk()
 void PointCloudLab::InitPointTree()
 {
     ui.treeWidget->setColumnCount(2); //设置列数
-    ui.treeWidget->setHeaderHidden(true);
+    ui.treeWidget->setHeaderHidden(false);
+	QStringList header;
+	header.push_back(QString("名称"));
+	header.push_back(QString("属性"));
+	ui.treeWidget->setHeaderLabels(header);
+	ui.treeWidget->header()->setSectionResizeMode(QHeaderView::Interactive);
 }
 
 
@@ -1121,7 +1126,8 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 void PointCloudLab::on_pushButton_drag_clicked() {
 	motionState = DRAG;
 	selectedCloudIdx = -1;
-
+	if (clicked_points_3d == nullptr)
+		return;
 	int n = clicked_points_3d->size();
 	cout << "Remove " << n << " selected points" << endl;
 	clicked_points_3d.reset(new PointCloudT);
@@ -1130,9 +1136,6 @@ void PointCloudLab::on_pushButton_drag_clicked() {
 	viewer->removePointCloud("clicked_points");
 	ui.qvtkWidget->update();
 
-	//pcl::visualization::PointCloudColorHandlerCustom<PointT> red(p->clicked_points_3d, 255, 0, 0);
-	//p->viewer->addPointCloud(p->clicked_points_3d, red, "clicked_points");
-	//p->viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "clicked_points");
 }
 
 void PointCloudLab::on_pushButton_setting_clicked() {
