@@ -131,6 +131,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>TestButt</string>
          </property>
@@ -224,7 +227,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>打开的点云</string>
+             <string>Point cloud list</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <property name="spacing">
@@ -263,7 +266,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_2">
             <property name="title">
-             <string>输出</string>
+             <string>Info</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <property name="spacing">
@@ -370,28 +373,27 @@
   </action>
   <action name="filterAction1">
    <property name="text">
-    <string>直通滤波</string>
+    <string>Pass Through</string>
    </property>
   </action>
   <action name="filterAction2">
    <property name="text">
-    <string>体素滤波
-</string>
+    <string>Voxel Grid</string>
    </property>
   </action>
   <action name="filterAction3">
    <property name="text">
-    <string>统计滤波</string>
+    <string>Statistical</string>
    </property>
   </action>
   <action name="copyPointAction">
    <property name="text">
-    <string>复制所选点云</string>
+    <string>Copy Selected</string>
    </property>
   </action>
   <action name="extractPointAction">
    <property name="text">
-    <string>提取所选点云</string>
+    <string>Extract Selected</string>
    </property>
   </action>
   <action name="actionjkj">

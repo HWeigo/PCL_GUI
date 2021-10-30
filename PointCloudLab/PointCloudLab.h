@@ -106,6 +106,7 @@ private:
     int OpenStlFile(string path);
     int OpenMeshFile(string path);
     int OpenPngFile(string path);
+	int OpenTxtFile(string path);
 	vector<int> GetValidPointsId();
 
 

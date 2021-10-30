@@ -168,6 +168,7 @@ public:
 
         pushButton = new QPushButton(widget_3);
         pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setEnabled(false);
 
         horizontalLayout_3->addWidget(pushButton);
 
@@ -301,12 +302,11 @@ public:
         PointCloudLabClass->setWindowTitle(QApplication::translate("PointCloudLabClass", "PointCloudLab", Q_NULLPTR));
         openFileAction->setText(QApplication::translate("PointCloudLabClass", "Open File", Q_NULLPTR));
         saveFileAction->setText(QApplication::translate("PointCloudLabClass", "Save File", Q_NULLPTR));
-        filterAction1->setText(QApplication::translate("PointCloudLabClass", "\347\233\264\351\200\232\346\273\244\346\263\242", Q_NULLPTR));
-        filterAction2->setText(QApplication::translate("PointCloudLabClass", "\344\275\223\347\264\240\346\273\244\346\263\242\n"
-"", Q_NULLPTR));
-        filterAction3->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
-        copyPointAction->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
-        extractPointAction->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        filterAction1->setText(QApplication::translate("PointCloudLabClass", "Pass Through", Q_NULLPTR));
+        filterAction2->setText(QApplication::translate("PointCloudLabClass", "Voxel Grid", Q_NULLPTR));
+        filterAction3->setText(QApplication::translate("PointCloudLabClass", "Statistical", Q_NULLPTR));
+        copyPointAction->setText(QApplication::translate("PointCloudLabClass", "Copy Selected", Q_NULLPTR));
+        extractPointAction->setText(QApplication::translate("PointCloudLabClass", "Extract Selected", Q_NULLPTR));
         actionjkj->setText(QApplication::translate("PointCloudLabClass", "jkj", Q_NULLPTR));
         pushButton_drag->setText(QApplication::translate("PointCloudLabClass", "Drag", Q_NULLPTR));
         pushButton_pointPick->setText(QApplication::translate("PointCloudLabClass", "PointPick", Q_NULLPTR));
@@ -316,8 +316,8 @@ public:
         pushButton_invertSelect->setText(QApplication::translate("PointCloudLabClass", "InvertSelect", Q_NULLPTR));
         pushButton_setting->setText(QApplication::translate("PointCloudLabClass", "Setting", Q_NULLPTR));
         pushButton->setText(QApplication::translate("PointCloudLabClass", "TestButt", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("PointCloudLabClass", "\346\211\223\345\274\200\347\232\204\347\202\271\344\272\221", Q_NULLPTR));
-        groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "\350\276\223\345\207\272", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("PointCloudLabClass", "Point cloud list", Q_NULLPTR));
+        groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "Info", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("PointCloudLabClass", "File", Q_NULLPTR));
         menuFilter->setTitle(QApplication::translate("PointCloudLabClass", "Filter", Q_NULLPTR));
         menuFit->setTitle(QApplication::translate("PointCloudLabClass", "Fit", Q_NULLPTR));

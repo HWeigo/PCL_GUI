@@ -84,11 +84,11 @@ void PointCloudLab::contextMenuEvent(QContextMenuEvent *event)
 void PointCloudLab::InitMenuAction()
 {
 	treeMenu = new QMenu(ui.treeWidget);
-	showAction = new QAction("显示", ui.treeWidget);
-	hideAction = new QAction("隐藏", ui.treeWidget);
-	deleteAction = new QAction("删除点云", ui.treeWidget);
-	setColorAction = new QAction("设置颜色", ui.treeWidget);
-	saveCurPointAction = new QAction("保存点云", ui.treeWidget);
+	showAction = new QAction("Show", ui.treeWidget);
+	hideAction = new QAction("Hide", ui.treeWidget);
+	deleteAction = new QAction("Delete", ui.treeWidget);
+	setColorAction = new QAction("Set color", ui.treeWidget);
+	saveCurPointAction = new QAction("Save", ui.treeWidget);
 
 	connect(showAction, SIGNAL(triggered(bool)), this, SLOT(OnShowAction()));
 	connect(hideAction, SIGNAL(triggered(bool)), this, SLOT(OnHideAction()));
@@ -102,7 +102,7 @@ void PointCloudLab::InitVtk()
     // Set up the QVTK window
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
     ui.qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
-    viewer->setupInteractor(ui.qvtkWidget->GetInteractor(), ui.qvtkWidget->GetRenderWindow());
+	viewer->setupInteractor(ui.qvtkWidget->GetInteractor(), ui.qvtkWidget->GetRenderWindow());
     ui.qvtkWidget->update();
 
     viewer->resetCamera();
@@ -118,8 +118,8 @@ void PointCloudLab::InitPointTree()
     ui.treeWidget->setColumnCount(2); //设置列数
     ui.treeWidget->setHeaderHidden(false);
 	QStringList header;
-	header.push_back(QString("名称"));
-	header.push_back(QString("属性"));
+	header.push_back(QString("Name"));
+	header.push_back(QString("Property"));
 	ui.treeWidget->setHeaderLabels(header);
 	ui.treeWidget->header()->setSectionResizeMode(QHeaderView::Interactive);
 }
@@ -177,6 +177,9 @@ int PointCloudLab::OpenFile(string filePath)
     else if (temp.back() == "png") {
         return OpenPngFile(filePath);
     }
+	else if(temp.back() == "txt") {
+		return OpenTxtFile(filePath);
+	}
 }
 
 int PointCloudLab::OpenPcdFile(string path)
@@ -220,6 +223,44 @@ int PointCloudLab::OpenStlFile(string path)
 int PointCloudLab::OpenMeshFile(string path)
 {
 	return CANCEL;
+}
+
+int PointCloudLab::OpenTxtFile(string path) {
+	ifstream fin(path);
+	//fin.open(path);
+	string line;
+	PointCloudT::Ptr cloud(new PointCloudT());
+	while (getline(fin, line)) {
+		stringstream ss; //输入流
+		ss << line; //向流中传值
+		if (!ss.eof()) {
+			double temp;
+			vector<double> res;
+			
+			while (ss >> temp) {
+				res.push_back(temp); //保存到vector
+			}
+			PointT point;
+			point.x = res[0];
+			point.y = res[1];
+			point.z = res[2];
+			cloud->push_back(point);
+			//cout << res.size() << endl;
+		}
+	}
+	fin.close();
+
+	string id = "pd";
+	int idx = pointCloudVector->AddPointCloud(cloud, id);
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(idx);
+	pcv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
+
+	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", pcv->GetCloudSize(), 0);
+	PointCloudTree.push_back(tempTree);
+
+	return SUCCESS;
 }
 
 int PointCloudLab::OpenPngFile(string path)
@@ -270,8 +311,8 @@ int PointCloudLab::OpenPngFile(string path)
 void PointCloudLab::on_openFileAction_triggered(bool checked)
 {
     QString curPath = QDir::currentPath();
-    QString dlgTitle = "打开文件"; //对话框标题
-    QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+    QString dlgTitle = "Open File"; //对话框标题
+    QString filter = "pcd file(*.pcd);;ply file(*.ply);;obj file(*.obj);;stl file(*.stl);;txt file(*.txt);;mesh file(*.mesh);;png file(*.png);;all file(*.*)"; //文件过滤器
     QString fileName = QFileDialog::getOpenFileName(this, dlgTitle, curPath, filter);
 
     if (fileName.isEmpty())
@@ -285,11 +326,11 @@ void PointCloudLab::on_openFileAction_triggered(bool checked)
 	int ret = OpenFile(filePath);
 	if (ret == SUCCESS)
 	{
-		PushMessage("打开成功");
+		PushMessage("point cloud opened");
 	}
 	else if (ret == FAILED)
 	{
-		PushMessage("打开失败");
+		PushMessage("fail to open point cloud");
 	}
 }
 void PointCloudLab::on_saveFileAction_triggered(bool checked)
@@ -297,15 +338,15 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 	// Todo: check valid point
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 	//保存所有点云
 	QString curPath = QCoreApplication::applicationDirPath();
-	QString dlgTitle = "保存点云"; //对话框标题
-	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	QString dlgTitle = "Save point cloud"; //对话框标题
+	QString filter = "pcd file(*.pcd);;ply file(*.ply);;obj file(*.obj);;stl file(*.stl);;mesh file(*.mesh);;png file(*.png);;all file(*.*)"; //文件过滤器
 	QString fileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
 	if (fileName.isEmpty()) {
 		return;
@@ -372,21 +413,21 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 {
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
-	dialog.setFixedSize(300, 200);
-	dialog.setWindowTitle("直通滤波参数设置");
+	dialog.setFixedSize(350, 200);
+	dialog.setWindowTitle("Pass through setting");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(pointCloudVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择滤波点云："), &curComboBox);
+	form.addRow(QString("Select point cloud："), &curComboBox);
 
 	QHBoxLayout  tempLayout1;
 	QCheckBox checkBoxX("X");
@@ -395,8 +436,8 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 	tempLayout1.addWidget(&checkBoxX);
 	tempLayout1.addWidget(&checkBoxY);
 	tempLayout1.addWidget(&checkBoxZ);
-	form.addRow(QString("滤波区域: "), &tempLayout1);
-	QLabel tempLabel("滤波范围:");
+	form.addRow(QString("Filter area: "), &tempLayout1);
+	QLabel tempLabel("Filter range:");
 	form.addRow(&tempLabel);
 	QLineEdit textMin;
 	QLineEdit textMax;
@@ -405,8 +446,8 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 	textMax.setValidator(&aDoubleValidator);
 	textMin.setText("0");
 	textMax.setText("0");
-	form.addRow(QString("    最小值="), &textMin);
-	form.addRow(QString("    最大值= "), &textMax);
+	form.addRow(QString("    min="), &textMin);
+	form.addRow(QString("    max= "), &textMax);
 
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
@@ -463,30 +504,29 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 	pcv->Show();
 	ui.qvtkWidget->update();
 	
-	PushMessage("直通滤波");
+	PushMessage("Pass through filter");
 }//直通滤波
 
 void PointCloudLab::on_filterAction2_triggered(bool checked)
 {
-	cout << "体素滤波\n";
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
-	dialog.setFixedSize(300, 200);
-	dialog.setWindowTitle("体素滤波参数设置");
+	dialog.setFixedSize(350, 200);
+	dialog.setWindowTitle("Voxel grid setting");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(pointCloudVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择滤波点云："), &curComboBox);
-	QLabel tempLabel("体素大小设置:");
+	form.addRow(QString("Select point cloud："), &curComboBox);
+	QLabel tempLabel("Voxel size:");
 	form.addRow(&tempLabel);
 	QLineEdit xQLine, yQLine, zQLine;
 	QDoubleValidator aDoubleValidator;
@@ -528,28 +568,28 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 	pcv->Show();
 	ui.qvtkWidget->update();
 
-	PushMessage("体素滤波");
+	PushMessage("Voxel grid filter");
 }//体素滤波
 
 void PointCloudLab::on_filterAction3_triggered(bool checked)
 {
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
-	dialog.setFixedSize(300, 200);
-	dialog.setWindowTitle("统计滤波参数设置");
+	dialog.setFixedSize(350, 200);
+	dialog.setWindowTitle("Statistical filter setting");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(pointCloudVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择滤波点云："), &curComboBox);
+	form.addRow(QString("Select point cloud："), &curComboBox);
 	QLineEdit neighbourNum, standerDif;
 
 	QDoubleValidator aDoubleValidator;
@@ -560,8 +600,8 @@ void PointCloudLab::on_filterAction3_triggered(bool checked)
 	neighbourNum.setText("0");
 	standerDif.setText("1");
 
-	form.addRow(QString("邻居数="), &neighbourNum);
-	form.addRow(QString("标准差乘数="), &standerDif);
+	form.addRow(QString("meank ="), &neighbourNum);
+	form.addRow(QString("std ="), &standerDif);
 
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
@@ -591,14 +631,13 @@ void PointCloudLab::on_filterAction3_triggered(bool checked)
 	pcv->Show();
 	ui.qvtkWidget->update();
 
-	PushMessage("统计滤波");
+	PushMessage("Statistical filter");
 
 }//统计滤波
 
 
 void PointCloudLab::on_copyPointAction_triggered(bool checked)
 {
-    cout << "复制点云\n";
 	if (setSelected.empty() || selectedCloudIdx == -1)
 		return;
 
@@ -624,12 +663,11 @@ void PointCloudLab::on_copyPointAction_triggered(bool checked)
 	QKeyEvent keyRelease(QEvent::KeyRelease, Qt::Key_X, Qt::NoModifier);
 	QCoreApplication::sendEvent(ui.qvtkWidget, &keyPress);
 	QCoreApplication::sendEvent(ui.qvtkWidget, &keyRelease);
-	PushMessage("复制点云完成");
+	PushMessage("selected point cloud copied");
 }//复制点云
 
 void PointCloudLab::on_extractPointAction_triggered(bool checked)
 {
-    cout << "提取点云\n";
 	if (setSelected.empty() || selectedCloudIdx == -1)
 		return;
 
@@ -661,8 +699,8 @@ void PointCloudLab::on_extractPointAction_triggered(bool checked)
 	pcv->DeletePointFromVector(setSelected);
 	ui.qvtkWidget->update();
 
-	PointCloudTree[selectedCloudIdx]->pointsSize->setText(0, QString("点数: ") + QString::number(pcv->GetCloudSize()));
-	PushMessage("提取点云完成");
+	PointCloudTree[selectedCloudIdx]->pointsSize->setText(0, QString("point num: ") + QString::number(pcv->GetCloudSize()));
+	PushMessage("selected point cloud extracted");
 }//提取点云
 
 
@@ -673,7 +711,7 @@ void PointCloudLab::OnShowAction()
 		return;
     if (pointCloudVector->IsShown(curPointsId))
         return;
-    //todo 显示点云
+    //todo Show点云
 	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(curPointsId);
 	assert(pcv != nullptr);
 	pcv->Show();
@@ -715,7 +753,7 @@ void PointCloudLab::OnDeleteAction()
         PointCloudTree[curPointsId] = nullptr;
 		pointCloudVector->DeletePointCloud(curPointsId);
 		ui.qvtkWidget->update();
-		PushMessage("删除成功");
+		PushMessage("delete point cloud");
     }
     cout << "delete points " << curPointsId << endl;
 
@@ -727,7 +765,7 @@ void PointCloudLab::OnSetColorAction()
 	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(curPointsId);
 	vector<int> currColor = pcv->GetColor();
 	QColor  iniColor = QColor(currColor[0], currColor[1], currColor[2]); //现有的文字颜色
-	QColor color = QColorDialog::getColor(iniColor, this, "选择颜色");
+	QColor color = QColorDialog::getColor(iniColor, this, "Select color");
 	if (color.isValid()) //选择有效
 	{
 		cout << "set color =R:" << color.red() << endl;
@@ -743,8 +781,8 @@ void PointCloudLab::OnSaveCurPointAction()
 {
 	cout << "save points " << curPointsId << endl;
 	QString curPath = QCoreApplication::applicationDirPath();
-	QString dlgTitle = "保存点云"; //对话框标题
-	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	QString dlgTitle = "Save"; //对话框标题
+	QString filter = "pcd file(*.pcd);;ply file(*.ply);;obj file(*.obj);;stl file(*.stl);;mesh file(*.mesh);;png file(*.png);;all file(*.*)"; // 文件过滤器
 	QString fileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
 	if (fileName.isEmpty()) {
 		return;
@@ -807,7 +845,7 @@ void PointCloudLab::OnSaveCurPointAction()
 	}
 
 
-	PushMessage("保存点云");
+	PushMessage("Save");
 
 }
 
@@ -969,21 +1007,21 @@ void PointCloudLab::on_pushButton_pointPick_clicked() {
 	cout << "-- Point pick mode -- " << endl;
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
 	dialog.setFixedSize(300, 100);
-	dialog.setWindowTitle("点选点云选择");
+	dialog.setWindowTitle("Selection");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(pointCloudVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择点选点云："), &curComboBox);
+	form.addRow(QString("Select point cloud："), &curComboBox);
 
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
@@ -1043,21 +1081,21 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 	cout << "-- Area pick mode -- " << endl;
 	vector<int> validPoints = GetValidPointsId();
 	if (validPoints.size() == 0) {
-		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString dlgTitle = "Warning";
+		QString strInfo = "No opened point cloud";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
 	dialog.setFixedSize(300, 100);
-	dialog.setWindowTitle("框选点云选择");
+	dialog.setWindowTitle("Selection");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(pointCloudVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择框选点云："), &curComboBox);
+	form.addRow(QString("Select point cloud："), &curComboBox);
 
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
@@ -1141,7 +1179,7 @@ void PointCloudLab::on_pushButton_drag_clicked() {
 void PointCloudLab::on_pushButton_setting_clicked() {
 	QDialog dialog(this);
 	dialog.setFixedSize(320, 240);
-	dialog.setWindowTitle("显示设置");
+	dialog.setWindowTitle("Settings");
 	QFormLayout form(&dialog);
 
 	QHBoxLayout  tempLayout1;
@@ -1155,15 +1193,15 @@ void PointCloudLab::on_pushButton_setting_clicked() {
 	tempLayout1.addWidget(&r);
 	tempLayout1.addWidget(&g);
 	tempLayout1.addWidget(&b);
-	form.addRow(QString("背景颜色: "), &tempLayout1);
+	form.addRow(QString("Background color: "), &tempLayout1);
 
 	QSpinBox pointSizeBox;
 	pointSizeBox.setValue(pointViewerSize);
 	pointSizeBox.setRange(1, 10);
 
-	form.addRow(QString("点大小: "), &pointSizeBox);
+	form.addRow(QString("Point size: "), &pointSizeBox);
 
-	QCheckBox checkBox1("显示坐标轴");
+	QCheckBox checkBox1("Show axis");
 	checkBox1.setChecked(isCoordinateSystemShown);
 	form.addRow(&checkBox1);
 
@@ -1171,9 +1209,9 @@ void PointCloudLab::on_pushButton_setting_clicked() {
 	coordSizeBox.setValue(coordinateSystemSize);
 	coordSizeBox.setRange(0.0001, 100000);
 
-	form.addRow(QString("坐标轴大小: "), &coordSizeBox);
+	form.addRow(QString("Axis thickness: "), &coordSizeBox);
 
-	QCheckBox checkBox2("显示尺寸(mm)");
+	QCheckBox checkBox2("Show grid(mm)");
 	checkBox2.setChecked(isCoordinateSystemSizeShown);
 	form.addRow(&checkBox2);
 
