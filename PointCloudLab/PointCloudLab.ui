@@ -131,11 +131,15 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="text">
           <string>TestButt</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newBtn">
+         <property name="text">
+          <string>newBtn</string>
          </property>
         </widget>
        </item>
@@ -227,7 +231,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>Point cloud list</string>
+             <string>打开的点云</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <property name="spacing">
@@ -266,7 +270,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_2">
             <property name="title">
-             <string>Info</string>
+             <string>输出</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <property name="spacing">
@@ -308,7 +312,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -325,16 +329,23 @@
     <addaction name="filterAction1"/>
     <addaction name="filterAction2"/>
     <addaction name="filterAction3"/>
+    <addaction name="filterAction4"/>
    </widget>
    <widget class="QMenu" name="menuFit">
     <property name="title">
      <string>Fit</string>
     </property>
+    <addaction name="linefitAction"/>
+    <addaction name="planefitAction"/>
+    <addaction name="ballfitAction"/>
    </widget>
    <widget class="QMenu" name="menuMatch">
     <property name="title">
      <string>Match</string>
     </property>
+    <addaction name="match1Action"/>
+    <addaction name="match2Action"/>
+    <addaction name="match3Action"/>
    </widget>
    <widget class="QMenu" name="menuMesh">
     <property name="title">
@@ -345,10 +356,12 @@
     <property name="title">
      <string>Measure</string>
     </property>
+    <addaction name="pmdAction"/>
+    <addaction name="boundaryAction"/>
    </widget>
    <widget class="QMenu" name="menuRoi">
     <property name="title">
-     <string>Roi</string>
+     <string>ROI</string>
     </property>
     <addaction name="copyPointAction"/>
     <addaction name="extractPointAction"/>
@@ -373,32 +386,88 @@
   </action>
   <action name="filterAction1">
    <property name="text">
-    <string>Pass Through</string>
+    <string>直通滤波</string>
    </property>
   </action>
   <action name="filterAction2">
    <property name="text">
-    <string>Voxel Grid</string>
+    <string>体素滤波
+</string>
    </property>
   </action>
   <action name="filterAction3">
    <property name="text">
-    <string>Statistical</string>
+    <string>统计滤波</string>
    </property>
   </action>
   <action name="copyPointAction">
    <property name="text">
-    <string>Copy Selected</string>
+    <string>复制所选点云</string>
    </property>
   </action>
   <action name="extractPointAction">
    <property name="text">
-    <string>Extract Selected</string>
+    <string>提取所选点云</string>
    </property>
   </action>
   <action name="actionjkj">
    <property name="text">
     <string>jkj</string>
+   </property>
+  </action>
+  <action name="match1Action">
+   <property name="text">
+    <string>点云粗配准</string>
+   </property>
+  </action>
+  <action name="filterAction4">
+   <property name="text">
+    <string>投影滤波</string>
+   </property>
+  </action>
+  <action name="linefitAction">
+   <property name="text">
+    <string>直线拟合</string>
+   </property>
+  </action>
+  <action name="planefitAction">
+   <property name="text">
+    <string>平面拟合</string>
+   </property>
+  </action>
+  <action name="boundaryAction1">
+   <property name="text">
+    <string>边缘提取</string>
+   </property>
+  </action>
+  <action name="pmdAction1">
+   <property name="text">
+    <string>平面度计算</string>
+   </property>
+  </action>
+  <action name="match2Action">
+   <property name="text">
+    <string>点云精配准</string>
+   </property>
+  </action>
+  <action name="ballfitAction">
+   <property name="text">
+    <string>三维球拟合</string>
+   </property>
+  </action>
+  <action name="pmdAction">
+   <property name="text">
+    <string>平面度计算</string>
+   </property>
+  </action>
+  <action name="boundaryAction">
+   <property name="text">
+    <string>边缘提取</string>
+   </property>
+  </action>
+  <action name="match3Action">
+   <property name="text">
+    <string>点云拼接</string>
    </property>
   </action>
  </widget>

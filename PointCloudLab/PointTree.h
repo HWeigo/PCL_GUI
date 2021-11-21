@@ -13,6 +13,7 @@ public:
 	QTreeWidgetItem *cloudName;
 	QTreeWidgetItem *pointsSize;
 	QTreeWidgetItem *faceSize;
+	string type;
 
 private:
 	Ui::PointCloudLabClass *ui;

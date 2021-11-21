@@ -1,25 +1,28 @@
 #include "PointCloudVisualization.h"
 
 PointCloudVisualization::PointCloudVisualization(boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer_in, \
-	PointCloudT::Ptr cloud_in, string id_in) : viewer(viewer_in), cloud(cloud_in), id(id_in) {
+	PointCloudT::Ptr cloud_in, string id_in) : BaseVisualization(viewer_in, id_in), cloudPtr(cloud_in) {
 	
-	cloud->height = (cloud->height == 0) ? 1 :cloud->height;
-	cloud->width = (cloud->width == 0) ? cloud->size() : cloud->height;
+	cloudPtr->height = (cloudPtr->height == 0) ? 1 :cloudPtr->height;
+	cloudPtr->width = (cloudPtr->width == 0) ? cloudPtr->size() : cloudPtr->width;
 
-	
-	cloudSize = cloud->size();
+	pointNum = cloudPtr->size();
 }
 
 void PointCloudVisualization::Show() {
 	isShown = true;
 	cout << "Display - " << id << endl;
-	SetColor(red, green, blue);
+	if (cloudPtr->points[10].r == 0 && cloudPtr->points[10].g == 0 && cloudPtr->points[10].b == 0)
+	{
+		SetColor(red, green, blue);
+	}
+	
 	SetPointSize(pointSize);
 	viewer->removePointCloud(id);
-	viewer->addPointCloud(cloud, id);
+	viewer->addPointCloud(cloudPtr, id);
 	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, pointSize, id);
 
-	viewer->updatePointCloud(cloud, id);
+	viewer->updatePointCloud(cloudPtr, id);
 }
 
 void PointCloudVisualization::Hide() {
@@ -31,28 +34,28 @@ void PointCloudVisualization::Hide() {
 }
 
 void PointCloudVisualization::Delete() {
-	PointCloudT().swap(*cloud);
+	PointCloudT().swap(*cloudPtr);
 	viewer->removePointCloud(id);
 
-	cout << cloud->size() << endl;
+	cout << cloudPtr->size() << endl;
 	isShown = false;
 }
 
 void PointCloudVisualization::AddCloud(PointCloudT::Ptr newCloud) {
-	*cloud += *newCloud;
-	cloudSize = cloud->size();
+	*cloudPtr += *newCloud;
+	pointNum = cloudPtr->size();
 }
 
 void PointCloudVisualization::DeletePointFromVector(const unordered_set<int> &setSelected) {
 	PointCloudT::Ptr tempCloud(new PointCloudT());
-	for (int i = 0; i < cloudSize; ++i) {
+	for (int i = 0; i < pointNum; ++i) {
 		if (setSelected.count(i) == 0) {
-			tempCloud->push_back(cloud->points.at(i));
+			tempCloud->push_back(cloudPtr->points.at(i));
 		}
 	}
-	cloud.swap(tempCloud);
+	cloudPtr.swap(tempCloud);
 	Show();
-	cloudSize = cloud->size();
+	pointNum = cloudPtr->size();
 }
 
 
@@ -61,25 +64,25 @@ void PointCloudVisualization::SetColor(const int r, const int g, const int b) {
 	green = g;
 	blue = b;
 
-	for (int i = 0; i < cloud->size(); ++i) {
-		cloud->points[i].r = red;
-		cloud->points[i].g = green;
-		cloud->points[i].b = blue;
+	for (int i = 0; i < cloudPtr->size(); ++i) {
+		cloudPtr->points[i].r = red;
+		cloudPtr->points[i].g = green;
+		cloudPtr->points[i].b = blue;
 	}
 
-	viewer->updatePointCloud(cloud, id);
+	viewer->updatePointCloud(cloudPtr, id);
 }
 
 void PointCloudVisualization::SetPointSize(const int sz) {
 	pointSize = sz;
 	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, pointSize, id);
 
-	viewer->updatePointCloud(cloud, id);
+	viewer->updatePointCloud(cloudPtr, id);
 }
 
 void PointCloudVisualization::Save(string filepath) {
 	pcl::PCDWriter writer;
-	writer.write(filepath, *cloud);
+	writer.write(filepath, *cloudPtr);
 }
 
 vector<int> PointCloudVisualization::GetColor() {
@@ -95,17 +98,13 @@ int PointCloudVisualization::GetPointSize() {
 	return pointSize;
 }
 
-int PointCloudVisualization::GetCloudSize() {
-	cloudSize = cloud->size();
-	return cloudSize;
-}
-
-string PointCloudVisualization::GetId() {
-	return id;
+int PointCloudVisualization::GetPointNum() {
+	pointNum = cloudPtr->size();
+	return pointNum;
 }
 
 PointCloudT::Ptr PointCloudVisualization::GetCloudPtr() {
-	return cloud;
+	return cloudPtr;
 }
 
 

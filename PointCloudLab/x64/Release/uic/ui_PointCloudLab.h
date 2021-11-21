@@ -42,6 +42,17 @@ public:
     QAction *copyPointAction;
     QAction *extractPointAction;
     QAction *actionjkj;
+    QAction *match1Action;
+    QAction *filterAction4;
+    QAction *linefitAction;
+    QAction *planefitAction;
+    QAction *boundaryAction1;
+    QAction *pmdAction1;
+    QAction *match2Action;
+    QAction *ballfitAction;
+    QAction *pmdAction;
+    QAction *boundaryAction;
+    QAction *match3Action;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QWidget *widget_3;
@@ -56,6 +67,7 @@ public:
     QFrame *line_4;
     QPushButton *pushButton_setting;
     QPushButton *pushButton;
+    QPushButton *newBtn;
     QSpacerItem *horizontalSpacer;
     QFrame *line_2;
     QWidget *widget_2;
@@ -101,6 +113,28 @@ public:
         extractPointAction->setObjectName(QStringLiteral("extractPointAction"));
         actionjkj = new QAction(PointCloudLabClass);
         actionjkj->setObjectName(QStringLiteral("actionjkj"));
+        match1Action = new QAction(PointCloudLabClass);
+        match1Action->setObjectName(QStringLiteral("match1Action"));
+        filterAction4 = new QAction(PointCloudLabClass);
+        filterAction4->setObjectName(QStringLiteral("filterAction4"));
+        linefitAction = new QAction(PointCloudLabClass);
+        linefitAction->setObjectName(QStringLiteral("linefitAction"));
+        planefitAction = new QAction(PointCloudLabClass);
+        planefitAction->setObjectName(QStringLiteral("planefitAction"));
+        boundaryAction1 = new QAction(PointCloudLabClass);
+        boundaryAction1->setObjectName(QStringLiteral("boundaryAction1"));
+        pmdAction1 = new QAction(PointCloudLabClass);
+        pmdAction1->setObjectName(QStringLiteral("pmdAction1"));
+        match2Action = new QAction(PointCloudLabClass);
+        match2Action->setObjectName(QStringLiteral("match2Action"));
+        ballfitAction = new QAction(PointCloudLabClass);
+        ballfitAction->setObjectName(QStringLiteral("ballfitAction"));
+        pmdAction = new QAction(PointCloudLabClass);
+        pmdAction->setObjectName(QStringLiteral("pmdAction"));
+        boundaryAction = new QAction(PointCloudLabClass);
+        boundaryAction->setObjectName(QStringLiteral("boundaryAction"));
+        match3Action = new QAction(PointCloudLabClass);
+        match3Action->setObjectName(QStringLiteral("match3Action"));
         centralWidget = new QWidget(PointCloudLabClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -168,9 +202,13 @@ public:
 
         pushButton = new QPushButton(widget_3);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setEnabled(false);
 
         horizontalLayout_3->addWidget(pushButton);
+
+        newBtn = new QPushButton(widget_3);
+        newBtn->setObjectName(QStringLiteral("newBtn"));
+
+        horizontalLayout_3->addWidget(newBtn);
 
         horizontalSpacer = new QSpacerItem(885, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -260,7 +298,7 @@ public:
         PointCloudLabClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PointCloudLabClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1280, 26));
+        menuBar->setGeometry(QRect(0, 0, 1280, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuFilter = new QMenu(menuBar);
@@ -289,6 +327,15 @@ public:
         menuFilter->addAction(filterAction1);
         menuFilter->addAction(filterAction2);
         menuFilter->addAction(filterAction3);
+        menuFilter->addAction(filterAction4);
+        menuFit->addAction(linefitAction);
+        menuFit->addAction(planefitAction);
+        menuFit->addAction(ballfitAction);
+        menuMatch->addAction(match1Action);
+        menuMatch->addAction(match2Action);
+        menuMatch->addAction(match3Action);
+        menuMeasure->addAction(pmdAction);
+        menuMeasure->addAction(boundaryAction);
         menuRoi->addAction(copyPointAction);
         menuRoi->addAction(extractPointAction);
 
@@ -302,12 +349,24 @@ public:
         PointCloudLabClass->setWindowTitle(QApplication::translate("PointCloudLabClass", "PointCloudLab", Q_NULLPTR));
         openFileAction->setText(QApplication::translate("PointCloudLabClass", "Open File", Q_NULLPTR));
         saveFileAction->setText(QApplication::translate("PointCloudLabClass", "Save File", Q_NULLPTR));
-        filterAction1->setText(QApplication::translate("PointCloudLabClass", "Pass Through", Q_NULLPTR));
-        filterAction2->setText(QApplication::translate("PointCloudLabClass", "Voxel Grid", Q_NULLPTR));
-        filterAction3->setText(QApplication::translate("PointCloudLabClass", "Statistical", Q_NULLPTR));
-        copyPointAction->setText(QApplication::translate("PointCloudLabClass", "Copy Selected", Q_NULLPTR));
-        extractPointAction->setText(QApplication::translate("PointCloudLabClass", "Extract Selected", Q_NULLPTR));
+        filterAction1->setText(QApplication::translate("PointCloudLabClass", "\347\233\264\351\200\232\346\273\244\346\263\242", Q_NULLPTR));
+        filterAction2->setText(QApplication::translate("PointCloudLabClass", "\344\275\223\347\264\240\346\273\244\346\263\242\n"
+"", Q_NULLPTR));
+        filterAction3->setText(QApplication::translate("PointCloudLabClass", "\347\273\237\350\256\241\346\273\244\346\263\242", Q_NULLPTR));
+        copyPointAction->setText(QApplication::translate("PointCloudLabClass", "\345\244\215\345\210\266\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
+        extractPointAction->setText(QApplication::translate("PointCloudLabClass", "\346\217\220\345\217\226\346\211\200\351\200\211\347\202\271\344\272\221", Q_NULLPTR));
         actionjkj->setText(QApplication::translate("PointCloudLabClass", "jkj", Q_NULLPTR));
+        match1Action->setText(QApplication::translate("PointCloudLabClass", "\347\202\271\344\272\221\347\262\227\351\205\215\345\207\206", Q_NULLPTR));
+        filterAction4->setText(QApplication::translate("PointCloudLabClass", "\346\212\225\345\275\261\346\273\244\346\263\242", Q_NULLPTR));
+        linefitAction->setText(QApplication::translate("PointCloudLabClass", "\347\233\264\347\272\277\346\213\237\345\220\210", Q_NULLPTR));
+        planefitAction->setText(QApplication::translate("PointCloudLabClass", "\345\271\263\351\235\242\346\213\237\345\220\210", Q_NULLPTR));
+        boundaryAction1->setText(QApplication::translate("PointCloudLabClass", "\350\276\271\347\274\230\346\217\220\345\217\226", Q_NULLPTR));
+        pmdAction1->setText(QApplication::translate("PointCloudLabClass", "\345\271\263\351\235\242\345\272\246\350\256\241\347\256\227", Q_NULLPTR));
+        match2Action->setText(QApplication::translate("PointCloudLabClass", "\347\202\271\344\272\221\347\262\276\351\205\215\345\207\206", Q_NULLPTR));
+        ballfitAction->setText(QApplication::translate("PointCloudLabClass", "\344\270\211\347\273\264\347\220\203\346\213\237\345\220\210", Q_NULLPTR));
+        pmdAction->setText(QApplication::translate("PointCloudLabClass", "\345\271\263\351\235\242\345\272\246\350\256\241\347\256\227", Q_NULLPTR));
+        boundaryAction->setText(QApplication::translate("PointCloudLabClass", "\350\276\271\347\274\230\346\217\220\345\217\226", Q_NULLPTR));
+        match3Action->setText(QApplication::translate("PointCloudLabClass", "\347\202\271\344\272\221\346\213\274\346\216\245", Q_NULLPTR));
         pushButton_drag->setText(QApplication::translate("PointCloudLabClass", "Drag", Q_NULLPTR));
         pushButton_pointPick->setText(QApplication::translate("PointCloudLabClass", "PointPick", Q_NULLPTR));
         pushButton_areaPick->setText(QApplication::translate("PointCloudLabClass", "AreaPick", Q_NULLPTR));
@@ -316,15 +375,16 @@ public:
         pushButton_invertSelect->setText(QApplication::translate("PointCloudLabClass", "InvertSelect", Q_NULLPTR));
         pushButton_setting->setText(QApplication::translate("PointCloudLabClass", "Setting", Q_NULLPTR));
         pushButton->setText(QApplication::translate("PointCloudLabClass", "TestButt", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("PointCloudLabClass", "Point cloud list", Q_NULLPTR));
-        groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "Info", Q_NULLPTR));
+        newBtn->setText(QApplication::translate("PointCloudLabClass", "newBtn", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("PointCloudLabClass", "\346\211\223\345\274\200\347\232\204\347\202\271\344\272\221", Q_NULLPTR));
+        groupBox_2->setTitle(QApplication::translate("PointCloudLabClass", "\350\276\223\345\207\272", Q_NULLPTR));
         menuFile->setTitle(QApplication::translate("PointCloudLabClass", "File", Q_NULLPTR));
         menuFilter->setTitle(QApplication::translate("PointCloudLabClass", "Filter", Q_NULLPTR));
         menuFit->setTitle(QApplication::translate("PointCloudLabClass", "Fit", Q_NULLPTR));
         menuMatch->setTitle(QApplication::translate("PointCloudLabClass", "Match", Q_NULLPTR));
         menuMesh->setTitle(QApplication::translate("PointCloudLabClass", "Mesh", Q_NULLPTR));
         menuMeasure->setTitle(QApplication::translate("PointCloudLabClass", "Measure", Q_NULLPTR));
-        menuRoi->setTitle(QApplication::translate("PointCloudLabClass", "Roi", Q_NULLPTR));
+        menuRoi->setTitle(QApplication::translate("PointCloudLabClass", "ROI", Q_NULLPTR));
     } // retranslateUi
 
 };

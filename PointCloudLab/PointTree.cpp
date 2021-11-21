@@ -14,14 +14,16 @@ PointTree::PointTree(Ui::PointCloudLabClass *input_ui, string filePath, std::str
 	cloudName->setFlags(cloudName->flags() &(~Qt::ItemIsEditable));
 	
 	QStringList tempList_sub1;
-	tempList_sub1.push_back(QString("point num: "));
+	tempList_sub1.push_back(QString("点数: "));
 	tempList_sub1.push_back(QString::number(pointNum));
 	pointsSize = new QTreeWidgetItem(cloudName, tempList_sub1);
 
 	QStringList tempList_sub2;
-	tempList_sub2.push_back(QString("face num: "));
+	tempList_sub2.push_back(QString("面数: "));
 	tempList_sub2.push_back(QString::number(faceNum));
 	faceSize = new QTreeWidgetItem(cloudName, tempList_sub2);
+
+	type = pointType;
 }
 PointTree::~PointTree()
 {

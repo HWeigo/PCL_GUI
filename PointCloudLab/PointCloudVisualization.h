@@ -15,45 +15,74 @@
 #include <vector>
 #include <unordered_set>
 
-typedef pcl::PointXYZRGBA PointT;
-typedef pcl::PointCloud<PointT> PointCloudT;
+#include "BaseVisualization.h"
 
-using namespace std;
+//typedef pcl::PointXYZRGBA PointT;
+//typedef pcl::PointCloud<PointT> PointCloudT;
 
-class PointCloudVisualization {
+class PointCloudVisualization : 
+	public BaseVisualization
+{
 private:
-	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-	PointCloudT::Ptr cloud;
-	string id;
-	int frontIdx;
-	int backIdx;
-	int cloudSize;
+	// Pointer pointing to current point cloud 
+	PointCloudT::Ptr cloudPtr;
 
+	// Point number of point cloud, pointNum == cloudPtr->size()
+	int pointNum;
+
+	// Point cloud point size
 	int pointSize = 3;
+
+	// Point cloud color
 	int red = 255;
 	int green = 255;
 	int blue = 255;
-	bool isShown = false;
 
+	// --- NOT USED --- 
+	int frontIdx;
+	int backIdx;
 
 public:
 	PointCloudVisualization(boost::shared_ptr<pcl::visualization::PCLVisualizer>, PointCloudT::Ptr, string);
 	~PointCloudVisualization() {};
 
+	// Show pointcloud
 	void Show();
-	void Hide();
-	vector<int> GetColor();
-	int GetPointSize();
-	int GetCloudSize();
-	PointCloudT::Ptr GetCloudPtr();
-	string GetId();
 
-	void SetColor(const int r, const int g, const int b);
-	void SetPointSize(const int sz);
-	bool IsShown() { return isShown; };
-	void AddCloud(PointCloudT::Ptr newCloud);
-	void DeletePointFromVector(const unordered_set<int> &setSelected);
+	// Hide pointcloud
+	void Hide();
+
+	// Save pointcloud to filepath
 	void Save(string filepath);
+
+	// Delete point cloud (release memory)
 	void Delete();
+
+	// Return number of points in this point cloud
+	int GetPointNum();
+
+	// Return the pointer pointing to current point cloud (pointPtr)
+	PointCloudT::Ptr GetCloudPtr();
+
+	// Set point cloud color to red = r, green = g, blue = b
+	void SetColor(const int r, const int g, const int b);
+
+	// Return point cloud's color
+	vector<int> GetColor();
+
+	// Set point cloud point size to sz
+	void SetPointSize(const int sz);
+
+	// Return point cloud's point size
+	int GetPointSize();
+
+	// Add newCloud's points into current point cloud
+	void AddCloud(PointCloudT::Ptr newCloud);
+
+	// Delete points 
+	void DeletePointFromVector(const unordered_set<int> &setSelected);
+
+	// Used to indicate current visualization if for point cloud (POINTCLOUD_TYPE)
+	inline string GetType() {return POINTCLOUD_TYPE;};
 
 };
