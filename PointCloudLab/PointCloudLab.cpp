@@ -250,7 +250,8 @@ int PointCloudLab::OpenTxtFile(string path) {
 	}
 	fin.close();
 
-	string id = "pd";
+    vector<string> tempId = PointCloudLab::split(path, "/");
+    string id = tempId.back();
 	int idx = pointCloudVector->AddPointCloud(cloud, id);
 	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(idx);
 	pcv->Show();
@@ -312,7 +313,7 @@ void PointCloudLab::on_openFileAction_triggered(bool checked)
 {
     QString curPath = QDir::currentPath();
     QString dlgTitle = "Open File"; //对话框标题
-    QString filter = "pcd file(*.pcd);;ply file(*.ply);;obj file(*.obj);;stl file(*.stl);;txt file(*.txt);;mesh file(*.mesh);;png file(*.png);;all file(*.*)"; //文件过滤器
+	QString filter = "all file(*.*);;pcd file(*.pcd);;ply file(*.ply);;obj file(*.obj);;stl file(*.stl);;txt file(*.txt);;mesh file(*.mesh);;png file(*.png)"; //文件过滤器
     QString fileName = QFileDialog::getOpenFileName(this, dlgTitle, curPath, filter);
 
     if (fileName.isEmpty())
