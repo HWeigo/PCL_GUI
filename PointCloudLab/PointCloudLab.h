@@ -30,8 +30,8 @@
 #include "ui_PointCloudLab.h"
 
 #include "PointCloudVisualization.h"
-#include "PointCloudVector.h"
-#include "PointTree.h"
+#include "EntityVector.h"
+#include "EntityTree.h"
 
 using std::string;
 
@@ -56,12 +56,20 @@ public:
 
 private:
 	boost::mutex cloud_mutex;
+
+	// --- Point selection function ---
+	// Store selected point cloud
 	PointCloudT::Ptr clicked_points_3d;
 
-	// Used for point and area picking
+	// Index of the selected point cloud to be processed picking
 	int selectedCloudIdx = -1;
+
+	// Point indexs in the selected point cloud (temporarily used in callback)
 	vector<int> selectedPointIdxs;
+
+	// Set to store point indexs in the selected point cloud
 	unordered_set<int> setSelected;
+
 
 	typedef enum {
 		DRAG = 0,
@@ -163,6 +171,7 @@ private:
 	// $ GetValidPointsId(MESH_TYPE) -> 2
 	// --- EXAMPLE END ---
 
+
 	// --- Point select function ---
 	// Point pick helper function
 	void PointPicking();
@@ -185,11 +194,11 @@ protected:
 	// PCL viewer (binded to Qt::qvtkWidget, see void InitVtk())
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
 
-	// Store poing cloud and mesh entity (see PointCloudVector.h)
-	PointCloudVector* entityVector;
+	// Store poing cloud and mesh entity (see EntityVector.h)
+	EntityVector* entityVector;
 
-	// Stores context tree's information 
-    vector<PointTree*> entityTree;
+	// Stores context manu's information 
+    vector<EntityTree*> entityTree;
     
 	// Temporarily stores the selected points 
 	PointCloudVisualization* selectedCloud = nullptr;

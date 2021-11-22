@@ -87,9 +87,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\BaseVisualization.cpp" />
     <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.cpp" />
-    <ClCompile Include="PointCloudVector.cpp" />
+    <ClCompile Include="EntityVector.cpp" />
     <ClCompile Include="PointCloudVisualization.cpp" />
-    <ClCompile Include="PointTree.cpp" />
+    <ClCompile Include="EntityTree.cpp" />
     <QtRcc Include="PointCloudLab.qrc" />
     <QtUic Include="PointCloudLab.ui" />
     <QtMoc Include="PointCloudLab.h" />
@@ -100,9 +100,9 @@
     <ClInclude Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\BaseVisualization.h" />
     <ClInclude Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.h" />
     <ClInclude Include="fun.hpp" />
-    <ClInclude Include="PointCloudVector.h" />
+    <ClInclude Include="EntityVector.h" />
     <ClInclude Include="PointCloudVisualization.h" />
-    <ClInclude Include="PointTree.h" />
+    <ClInclude Include="EntityTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

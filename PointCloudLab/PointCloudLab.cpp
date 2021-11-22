@@ -32,7 +32,7 @@ PointCloudLab::PointCloudLab(QWidget *parent)
     InitMenuAction();
 
 	// Init PointCloudVector
-	entityVector = new PointCloudVector(viewer);
+	entityVector = new EntityVector(viewer);
 
 	// Init complete cloud and selected cloud
 	PointCloudT::Ptr tempSelectedCloud(new PointCloudT());
@@ -202,7 +202,7 @@ int PointCloudLab::OpenPcdFile(std::string path)
 	completeCloud->AddCloud(cloud);
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
     //isDeleted.push_back(false);
     //isShown.push_back(true);
@@ -230,7 +230,7 @@ int PointCloudLab::OpenPlyFile(std::string path)
 	ui.qvtkWidget->update();
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "Mesh", meshv->GetPointNum(), meshv->GetFaceNum());
+	EntityTree * tempTree = new EntityTree(&ui, id, "Mesh", meshv->GetPointNum(), meshv->GetFaceNum());
 	entityTree.push_back(tempTree);
 
 
@@ -281,7 +281,7 @@ int PointCloudLab::OpenObjFile(std::string path)
 	completeCloud->AddCloud(cloud);
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 	//isDeleted.push_back(false);
 	//isShown.push_back(true);
@@ -423,7 +423,7 @@ int PointCloudLab::OpenPngFile(std::string path)
 		completeCloud->AddCloud(cloud);
 
 		// Todo: edit type, point num, face num
-		PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+		EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 		entityTree.push_back(tempTree);
 		//isDeleted.push_back(false);
 		//isShown.push_back(true);
@@ -474,7 +474,7 @@ int PointCloudLab::OpenPngFile(std::string path)
 		completeCloud->AddCloud(cloud);
 
 		// Todo: edit type, point num, face num
-		PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+		EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 		entityTree.push_back(tempTree);
 		//isDeleted.push_back(false);
 		//isShown.push_back(true);
@@ -1101,7 +1101,7 @@ void PointCloudLab::on_linefitAction_triggered(bool checked)
 	completeCloud->AddCloud(linecloud);
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 	stringstream aa,bb,cc,dd,ee,ff;
 	aa << a; bb << b; cc << c; dd << d; ee << e; ff << f;
@@ -1181,7 +1181,7 @@ void PointCloudLab::on_planefitAction_triggered(bool checked)
 
 	completeCloud->AddCloud(planecloud);
 
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 
 	//pcl::io::savePCDFile("C:/Users/sjtuzhy/Desktop/plane.pcd", *planecloud);
@@ -1263,7 +1263,7 @@ void PointCloudLab::on_ballfitAction_triggered(bool checked)
 
 	completeCloud->AddCloud(ballcloud);
 
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 
 	stringstream aa, bb, cc, dd;
@@ -1378,7 +1378,7 @@ void PointCloudLab::on_boundaryAction_triggered(bool checked)
 	completeCloud->AddCloud(boundarycloud);
 
 	// Todo: edit type, point num, face num
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 	
 
@@ -1445,7 +1445,7 @@ void PointCloudLab::on_match1Action_triggered(bool checked)
 	ui.qvtkWidget->update();
 
 	completeCloud->AddCloud(sac_result);
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 
 	stringstream pp;
@@ -1515,7 +1515,7 @@ void PointCloudLab::on_match2Action_triggered(bool checked)
 	ui.qvtkWidget->update();
 
 	completeCloud->AddCloud(icp_result);
-	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 
 	stringstream pp;
@@ -1608,7 +1608,7 @@ void PointCloudLab::on_match3Action_triggered(bool checked)
 		ui.qvtkWidget->update();
 
 		completeCloud->AddCloud(cloudadd2);
-		PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+		EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 		entityTree.push_back(tempTree);
 
 		std::string msg = "两块点云拼接完成";
@@ -1670,7 +1670,7 @@ void PointCloudLab::on_match3Action_triggered(bool checked)
 		ui.qvtkWidget->update();
 
 		completeCloud->AddCloud(cloudadd3);
-		PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+		EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 		entityTree.push_back(tempTree);
 
 		std::string msg = "三块点云拼接完成";
@@ -1701,7 +1701,7 @@ void PointCloudLab::on_copyPointAction_triggered(bool checked)
 	*tempPtr = *clicked_points_3d;
 	int idx = entityVector->AddPointCloud(tempPtr, id);
 
-	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
 	entityTree.push_back(tempTree);
 
 	entityTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
@@ -1734,7 +1734,7 @@ void PointCloudLab::on_extractPointAction_triggered(bool checked)
 	*tempPtr = *clicked_points_3d;
 	int idx = entityVector->AddPointCloud(tempPtr, id);
 
-	PointTree * tempTree = new PointTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", tempPtr->size(), 0);
 	entityTree.push_back(tempTree);
 
 	entityTree[idx]->cloudName->setTextColor(0, QColor(150, 150, 150));
@@ -2256,6 +2256,9 @@ void PointCloudLab::on_pushButton_areaPick_clicked() {
 }
 
 void PointCloudLab::on_pushButton_drag_clicked() {
+	//viewer->registerAreaPickingCallback(nullptr, nullptr);
+	//viewer->registerPointPickingCallback(nullptr, nullptr);
+
 	motionState = DRAG;
 	selectedCloudIdx = -1;
 	if (clicked_points_3d == nullptr)
@@ -2266,8 +2269,6 @@ void PointCloudLab::on_pushButton_drag_clicked() {
 	vector<int>().swap(selectedPointIdxs);
 	unordered_set<int>().swap(setSelected);
 	viewer->removePointCloud("clicked_points");
-	//viewer->registerAreaPickingCallback(nullptr, nullptr);
-	//viewer->registerPointPickingCallback(nullptr, nullptr);
 	ui.qvtkWidget->update();
 
 }

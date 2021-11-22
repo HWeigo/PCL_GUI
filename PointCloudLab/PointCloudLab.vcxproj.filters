@@ -40,17 +40,17 @@
     <ClCompile Include="PointCloudVisualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PointTree.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointCloudVector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\BaseVisualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityTree.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,12 +62,6 @@
     <ClInclude Include="PointCloudVisualization.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="PointTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointCloudVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fun.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,6 +69,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
