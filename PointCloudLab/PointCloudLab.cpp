@@ -304,7 +304,6 @@ int PointCloudLab::OpenObjFile(std::string path)
 
 }
 
-//stl,mesh,png 不能读成pointcloudxyz格式
 int PointCloudLab::OpenStlFile(std::string path)
 {
 	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
@@ -591,45 +590,50 @@ int  PointCloudLab::SavePlyFile(std::string filepath, PointCloudT::Ptr Cloud)
 //点云保存
 void PointCloudLab::on_saveFileAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
-		QString strInfo = "当前没有打开的点云";
+		QString strInfo = "当前没有打开的实体";
 		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
 		return;
 	}
 
 	QDialog dialog(this);
 	dialog.setFixedSize(300, 100);
-	dialog.setWindowTitle("选择要保存的点云");
+	dialog.setWindowTitle("选择要保存的实体");
 	QFormLayout form(&dialog);
 	QComboBox curComboBox;
 	for (int i = 0; i < validPoints.size(); ++i) {
 		curComboBox.addItem(QString::fromStdString(entityVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	form.addRow(QString("选择点云："), &curComboBox);
+	form.addRow(QString("选择实体："), &curComboBox);
 
 	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
 		Qt::Horizontal, &dialog);
 	form.addRow(&buttonBox);
 	QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-	QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reje ct()));
-	
+	QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
 	if (dialog.exec() == QDialog::Rejected) {
 		return;
 	}
 
-	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
-	PointCloudT::Ptr selectedCloud = entityVector->GetCloudPtrOfIdx(selectedCloudIdx);
-
-
-	
 	QString curPath = QCoreApplication::applicationDirPath();
 	//QString curPath = "C:/Users/sjtuzhy/Desktop/point cloud doc";
 	QString dlgTitle = "保存点云"; //对话框标题
 	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;所有文件(*.*)"; //文件过滤器 mesh文件(*.mesh);;png文件(*.png);;
+
+	int selectedEntityIdx = validPoints[curComboBox.currentIndex()];
+	if (entityVector->GetType(selectedEntityIdx) == POINTCLOUD_TYPE) {
+		//PointCloudT::Ptr selectedCloud = entityVector->GetCloudPtrOfIdx(selectedCloudIdx);
+		dlgTitle = "保存点云"; 
+		filter = "pcd文件(*.pcd);;所有文件(*.*)"; 
+	} else if (entityVector->GetType(selectedEntityIdx) == MESH_TYPE) {
+		dlgTitle = "保存网格"; 
+		filter = "ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;所有文件(*.*)"; 
+	}
+
 	QString fileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
-	
 	if (fileName.isEmpty()) {
 		return;
 	}
@@ -644,23 +648,33 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 	vector<std::string> temp = split(filePath, ".");
 	std::string fileType = temp.back();
 
-	//selectedCloud->height = (selectedCloud->height == 0) ? 1 : selectedCloud->height;
-	//selectedCloud->width = (selectedCloud->width == 0) ? selectedCloud->size() : selectedCloud->width;
-	//selectedCloud->height = 1; selectedCloud->width = selectedCloud->size();
-	//std::cout << selectedCloud <<'\n'<<selectedCloud->size()<<'\n'<<selectedCloud->height<<'\n'<<selectedCloud->width<<'\n';
-	//std::cout << filePath << '\n';
+	if (fileType == "pcd") {
+		entityVector->SavePointCloudOfIdx(filePath, selectedEntityIdx, ".pcd");
+	} else if (fileType == "ply") {
+		entityVector->SaveMeshOfIdx(filePath, selectedEntityIdx, ".ply");
+	} else if (fileType == "stl") {
+		entityVector->SaveMeshOfIdx(filePath, selectedEntityIdx, ".stl");
+	} else if (fileType == "obj") {
+		entityVector->SaveMeshOfIdx(filePath, selectedEntityIdx, ".obj");
+	} 
+	PushMessage("保存成功");
+	////selectedCloud->height = (selectedCloud->height == 0) ? 1 : selectedCloud->height;
+	////selectedCloud->width = (selectedCloud->width == 0) ? selectedCloud->size() : selectedCloud->width;
+	////selectedCloud->height = 1; selectedCloud->width = selectedCloud->size();
+	////std::cout << selectedCloud <<'\n'<<selectedCloud->size()<<'\n'<<selectedCloud->height<<'\n'<<selectedCloud->width<<'\n';
+	////std::cout << filePath << '\n';
 
-	int ret = SaveFiles(filePath,selectedCloud);
-	if (ret == SUCCESS)
-	{
-		std::cout << "成功" << '\n';
-		PushMessage("保存成功");
-	}
-	else if (ret == FAILED)
-	{
-		std::cout << "失败" << '\n';
-		PushMessage("保存失败");
-	}
+	//int ret = SaveFiles(filePath,selectedCloud);
+	//if (ret == SUCCESS)
+	//{
+	//	std::cout << "成功" << '\n';
+	//	PushMessage("保存成功");
+	//}
+	//else if (ret == FAILED)
+	//{
+	//	std::cout << "失败" << '\n';
+	//	PushMessage("保存失败");
+	//}
 	/*
 	if (fileType == "pcd" )       //|| fileType == "ply" || fileType == "obj" || fileType == "stl" || fileType == "mesh"
 	{

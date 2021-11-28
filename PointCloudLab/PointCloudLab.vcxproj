@@ -85,8 +85,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\BaseVisualization.cpp" />
-    <ClCompile Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\MeshVisualization.cpp" />
+    <ClCompile Include="BaseVisualization.cpp" />
+    <ClCompile Include="MeshVisualization.cpp" />
     <ClCompile Include="EntityVector.cpp" />
     <ClCompile Include="PointCloudVisualization.cpp" />
     <ClCompile Include="EntityTree.cpp" />
@@ -97,8 +97,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\BaseVisualization.h" />
-    <ClInclude Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\MeshVisualization.h" />
+    <ClInclude Include="BaseVisualization.h" />
+    <ClInclude Include="MeshVisualization.h" />
     <ClInclude Include="fun.hpp" />
     <ClInclude Include="EntityVector.h" />
     <ClInclude Include="PointCloudVisualization.h" />
