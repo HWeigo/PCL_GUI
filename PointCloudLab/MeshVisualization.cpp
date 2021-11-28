@@ -27,12 +27,17 @@ void MeshVisualization::Hide() {
 }
 
 void MeshVisualization::Save(string filepath){
-	pcl::io::savePLYFile(filepath, *meshPtr);
+	//pcl::io::savePLYFile(filepath, *meshPtr);
+	Save(filepath, ".ply");
 }
 
 void MeshVisualization::Save(string filepath, string type) {
 	if (type == ".ply") {
 		pcl::io::savePLYFile(filepath, *meshPtr);
+	} else if (type == ".stl") {
+		pcl::io::savePolygonFileSTL(filepath, *meshPtr);
+	} else if (type == ".obj") {
+		pcl::io::saveOBJFile(filepath, *meshPtr);
 	}
 }
 

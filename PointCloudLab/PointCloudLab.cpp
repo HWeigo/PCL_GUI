@@ -90,9 +90,9 @@ void PointCloudLab::InitMenuAction()
 	treeMenu = new QMenu(ui.treeWidget);
 	showAction = new QAction("显示", ui.treeWidget);
 	hideAction = new QAction("隐藏", ui.treeWidget);
-	deleteAction = new QAction("删除点云", ui.treeWidget);
+	deleteAction = new QAction("删除", ui.treeWidget);
 	setColorAction = new QAction("设置颜色", ui.treeWidget);
-	saveCurPointAction = new QAction("保存点云", ui.treeWidget);
+	saveCurPointAction = new QAction("保存", ui.treeWidget);
 
 	connect(showAction, SIGNAL(triggered(bool)), this, SLOT(OnShowAction()));
 	connect(hideAction, SIGNAL(triggered(bool)), this, SLOT(OnHideAction()));
@@ -624,8 +624,8 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 
 
 	
-	//QString curPath = QCoreApplication::applicationDirPath();
-	QString curPath = "C:/Users/sjtuzhy/Desktop/point cloud doc";
+	QString curPath = QCoreApplication::applicationDirPath();
+	//QString curPath = "C:/Users/sjtuzhy/Desktop/point cloud doc";
 	QString dlgTitle = "保存点云"; //对话框标题
 	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;所有文件(*.*)"; //文件过滤器 mesh文件(*.mesh);;png文件(*.png);;
 	QString fileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
@@ -1969,15 +1969,17 @@ void PointCloudLab::OnSaveCurPointAction()
 	vector<std::string> temp = split(filePath, ".");
 	std::string fileType = temp.back();
 
-	if (fileType == "pcd" ||  fileType == "obj" || fileType == "stl" || fileType == "mesh")
-	{
-		entityVector->SavePointCloudOfIdx(filePath, curPointsId);
-	}
-	else if (fileType == "ply") {
-		entityVector->SaveMeshOfIdx(filePath, curPointsId);
-	}
-	else if (fileType == "png")
-	{
+	if (fileType == "pcd") {
+		entityVector->SavePointCloudOfIdx(filePath, curPointsId, ".pcd");
+	} else if (fileType == "ply") {
+		entityVector->SaveMeshOfIdx(filePath, curPointsId, ".ply");
+	} else if (fileType == "stl") {
+		entityVector->SaveMeshOfIdx(filePath, curPointsId, ".stl");
+	} else if (fileType == "obj") {
+		entityVector->SaveMeshOfIdx(filePath, curPointsId, ".obj");
+	} else if (fileType == "mesh") {
+		// TODO
+	} else if (fileType == "png") {
 		QDialog dialog(this);
 		dialog.setFixedSize(220, 200);
 		dialog.setWindowTitle("设置深度图参数");

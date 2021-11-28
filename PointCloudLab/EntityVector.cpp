@@ -39,21 +39,21 @@ void EntityVector::DeleteEntity(const int idx) {
 	isValid[idx] = false;
 }
 
-void EntityVector::SavePointCloudOfIdx(string filepath, const int idx) {
+void EntityVector::SavePointCloudOfIdx(const string filepath, const int idx, const string type) {
 	assert(idx >= 0 && idx < size);
 	if (visualVector[idx]->GetType() != POINTCLOUD_TYPE)
 		return;
 	PointCloudVisualization* pcv = (PointCloudVisualization*)visualVector[idx];
-	pcv->Save(filepath);
+	pcv->Save(filepath, type);
 }
 
-void EntityVector::SaveMeshOfIdx(string filepath, const int idx)
+void EntityVector::SaveMeshOfIdx(const string filepath, const int idx, const string type)
 {
 	assert(idx >= 0 && idx < size);
 	if (visualVector[idx]->GetType() != MESH_TYPE)
 		return;
 	MeshVisualization* meshv = (MeshVisualization*)visualVector[idx];
-	meshv->Save(filepath);
+	meshv->Save(filepath, type);
 }
 
 bool EntityVector::IsValid(const int idx) {

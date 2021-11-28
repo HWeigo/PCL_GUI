@@ -71,10 +71,10 @@ public:
 	string GetId(const int idx);
 
 	// Save the idx th point cloud to filepath
-	void SavePointCloudOfIdx(string filepath, const int idx);
+	void SavePointCloudOfIdx(const string filepath, const int idx, const string type);
 
 	// Save the idx th mesh to filepath
-	void SaveMeshOfIdx(string filepath, const int idx);
+	void SaveMeshOfIdx(const string filepath, const int idx, const string type);
 
 	// --- NOT USED ---
 	int GetCompleteCloudSize();
