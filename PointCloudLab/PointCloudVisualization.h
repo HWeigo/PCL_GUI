@@ -56,6 +56,7 @@ public:
 	void Save(string filepath);
 
 	// Save pointcloud to filepath as specific type
+	// Support type: ".pcd"
 	void Save(string filepath, string type);
 
 	// Delete point cloud (release memory)

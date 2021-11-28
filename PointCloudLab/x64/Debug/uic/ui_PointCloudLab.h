@@ -53,6 +53,7 @@ public:
     QAction *pmdAction;
     QAction *boundaryAction;
     QAction *match3Action;
+    QAction *meshToPointCloudAction;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QWidget *widget_3;
@@ -135,6 +136,8 @@ public:
         boundaryAction->setObjectName(QStringLiteral("boundaryAction"));
         match3Action = new QAction(PointCloudLabClass);
         match3Action->setObjectName(QStringLiteral("match3Action"));
+        meshToPointCloudAction = new QAction(PointCloudLabClass);
+        meshToPointCloudAction->setObjectName(QStringLiteral("meshToPointCloudAction"));
         centralWidget = new QWidget(PointCloudLabClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -298,7 +301,7 @@ public:
         PointCloudLabClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PointCloudLabClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1280, 23));
+        menuBar->setGeometry(QRect(0, 0, 1280, 26));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuFilter = new QMenu(menuBar);
@@ -338,6 +341,7 @@ public:
         menuMeasure->addAction(boundaryAction);
         menuRoi->addAction(copyPointAction);
         menuRoi->addAction(extractPointAction);
+        menuRoi->addAction(meshToPointCloudAction);
 
         retranslateUi(PointCloudLabClass);
 
@@ -367,6 +371,7 @@ public:
         pmdAction->setText(QApplication::translate("PointCloudLabClass", "\345\271\263\351\235\242\345\272\246\350\256\241\347\256\227", Q_NULLPTR));
         boundaryAction->setText(QApplication::translate("PointCloudLabClass", "\350\276\271\347\274\230\346\217\220\345\217\226", Q_NULLPTR));
         match3Action->setText(QApplication::translate("PointCloudLabClass", "\347\202\271\344\272\221\346\213\274\346\216\245", Q_NULLPTR));
+        meshToPointCloudAction->setText(QApplication::translate("PointCloudLabClass", "\347\275\221\346\240\274\347\202\271\344\272\221\346\217\220\345\217\226", Q_NULLPTR));
         pushButton_drag->setText(QApplication::translate("PointCloudLabClass", "Drag", Q_NULLPTR));
         pushButton_pointPick->setText(QApplication::translate("PointCloudLabClass", "PointPick", Q_NULLPTR));
         pushButton_areaPick->setText(QApplication::translate("PointCloudLabClass", "AreaPick", Q_NULLPTR));

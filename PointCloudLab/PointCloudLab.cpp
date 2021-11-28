@@ -161,7 +161,7 @@ vector<std::string> PointCloudLab::split(const std::string& str, const std::stri
     return res;
 }
 
-int PointCloudLab::OpenFile(std::string filePath)
+int PointCloudLab::OpenFile(string filePath)
 {
     vector<std::string> temp = split(filePath, ".");
     if (temp.back() == "pcd") {
@@ -178,10 +178,12 @@ int PointCloudLab::OpenFile(std::string filePath)
     }
     else if (temp.back() == "png") {
         return OpenPngFile(filePath);
-    }
+	} else if (temp.back() == "txt") {
+		return OpenTxtFile(filePath);
+	}
 }
 
-int PointCloudLab::OpenPcdFile(std::string path)
+int PointCloudLab::OpenPcdFile(string path)
 {
 	PointCloudT::Ptr cloud(new PointCloudT());
 
@@ -199,7 +201,7 @@ int PointCloudLab::OpenPcdFile(std::string path)
     viewer->resetCamera();
     ui.qvtkWidget->update();
 
-	completeCloud->AddCloud(cloud);
+	//completeCloud->AddCloud(cloud);
 
 	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
@@ -208,7 +210,7 @@ int PointCloudLab::OpenPcdFile(std::string path)
 
 // Comment the define if to save obj to point cloud type
 #define LOAD_PLY_AS_MESH
-int PointCloudLab::OpenPlyFile(std::string path)
+int PointCloudLab::OpenPlyFile(string path)
 {
 #ifdef LOAD_PLY_AS_MESH
 	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
@@ -254,7 +256,7 @@ int PointCloudLab::OpenPlyFile(std::string path)
 
 // Comment the define if to save obj to point cloud type
 #define LOAD_OBJ_AS_MESH
-int PointCloudLab::OpenObjFile(std::string path)
+int PointCloudLab::OpenObjFile(string path)
 {
 #ifdef LOAD_OBJ_AS_MESH
 	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
@@ -304,7 +306,7 @@ int PointCloudLab::OpenObjFile(std::string path)
 
 }
 
-int PointCloudLab::OpenStlFile(std::string path)
+int PointCloudLab::OpenStlFile(string path)
 {
 	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
 	if (!pcl::io::loadPolygonFileSTL(path, *mesh))
@@ -327,15 +329,13 @@ int PointCloudLab::OpenStlFile(std::string path)
 	return SUCCESS;
 }
 
-int PointCloudLab::OpenMeshFile(std::string path)
+int PointCloudLab::OpenMeshFile(string path)
 {
 	return CANCEL;
 }
 
-
-
 //png格式 可以读成矩阵
-int PointCloudLab::OpenPngFile(std::string path)
+int PointCloudLab::OpenPngFile(string path)
 {
 	QDialog dialog(this);
 	//dialog.setFixedSize(200, 200);
@@ -514,8 +514,43 @@ int PointCloudLab::OpenPngFile(std::string path)
 	}
 	}
 
+int PointCloudLab::OpenTxtFile(string path) {
+	ifstream fin(path);
+	//fin.open(path);
+	string line;
+	PointCloudT::Ptr cloud(new PointCloudT());
+	while (getline(fin, line)) {
+		stringstream ss; 
+		ss << line; 
+		if (!ss.eof()) {
+			double temp;
+			vector<double> res;
 
+			while (ss >> temp) {
+				res.push_back(temp); 
+			}
+			PointT point;
+			point.x = res[0];
+			point.y = res[1];
+			point.z = res[2];
+			cloud->push_back(point);
+		}
+	}
+	fin.close();
 
+	vector<string> tempId = PointCloudLab::split(path, "/");
+    string id = tempId.back();
+	int idx = entityVector->AddPointCloud(cloud, id);
+	PointCloudVisualization *pcv = entityVector->GetPCVofIdx(idx);
+	pcv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
+
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
+	entityTree.push_back(tempTree);
+
+	return SUCCESS;
+}
 
 //slot:
 void PointCloudLab::on_openFileAction_triggered(bool checked)
@@ -523,7 +558,7 @@ void PointCloudLab::on_openFileAction_triggered(bool checked)
     //QString curPath = QDir::currentPath();
 	QString curPath = "C:/Users/sjtuzhy/Desktop/point cloud doc";
     QString dlgTitle = "打开文件"; //对话框标题
-    QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;txt文件(*.txt);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
     QString fileName = QFileDialog::getOpenFileName(this, dlgTitle, curPath, filter);
 
     if (fileName.isEmpty())
@@ -590,6 +625,7 @@ int  PointCloudLab::SavePlyFile(std::string filepath, PointCloudT::Ptr Cloud)
 //点云保存
 void PointCloudLab::on_saveFileAction_triggered(bool checked)
 {
+	// Get all valid entities (both point cloud and mesh)
 	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
@@ -623,12 +659,14 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 	QString dlgTitle = "保存点云"; //对话框标题
 	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;所有文件(*.*)"; //文件过滤器 mesh文件(*.mesh);;png文件(*.png);;
 
+	// Get the selected entity's index
 	int selectedEntityIdx = validPoints[curComboBox.currentIndex()];
 	if (entityVector->GetType(selectedEntityIdx) == POINTCLOUD_TYPE) {
-		//PointCloudT::Ptr selectedCloud = entityVector->GetCloudPtrOfIdx(selectedCloudIdx);
+		// Set point cloud's saving format
 		dlgTitle = "保存点云"; 
 		filter = "pcd文件(*.pcd);;所有文件(*.*)"; 
 	} else if (entityVector->GetType(selectedEntityIdx) == MESH_TYPE) {
+		// Set mesh's saving format
 		dlgTitle = "保存网格"; 
 		filter = "ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;所有文件(*.*)"; 
 	}
@@ -642,12 +680,12 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 	if (file.exists()) {
 		QFile::remove(fileName);
 	}
-
 	QTextCodec *code = QTextCodec::codecForName("GB2312");//解决中文路径问题
 	std::string filePath = code->fromUnicode(fileName).data();
 	vector<std::string> temp = split(filePath, ".");
 	std::string fileType = temp.back();
 
+	// Save file according to the saving format(type)
 	if (fileType == "pcd") {
 		entityVector->SavePointCloudOfIdx(filePath, selectedEntityIdx, ".pcd");
 	} else if (fileType == "ply") {
@@ -737,8 +775,20 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 //直通滤波
 void PointCloudLab::on_filterAction1_triggered(bool checked)
 {
-	// Get valid point cloud index (note: point cloud only)
+	// --- Start getting valid entity index ---
+	// Get valid point cloud index 
+	// For more details, check the example in PointCloudLab.h
 	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
+
+	// NOTE: If processing a mesh, the above would be like:
+	/*
+	// Get valid mesh index 	
+	vector<int> validMesh = GetValidEntitiesId(MESH_TYPE);
+	*/
+	// --- End getting valid entity index ---
+
+
+	// --- Start setting Qt dialog ---
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -755,7 +805,8 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 		// Show valid point cloud's id on combo box
 		curComboBox.addItem(QString::fromStdString(entityVector->GetId(validPoints[i])));//改成点云的名字
 	}
-	// Here curComboBox.currentIndex() is the index of combo box
+
+	// Here, curComboBox.currentIndex() is the index of combo box
 	// Use validPoints[curComboBox.currentIndex()] to get the actual point cloud index in entityVector and entityTree 
 	form.addRow(QString("选择滤波点云："), &curComboBox);
 
@@ -799,12 +850,26 @@ void PointCloudLab::on_filterAction1_triggered(bool checked)
 	double maxVal = maxStr.toDouble();
 	cout << "min =" << minVal << endl;
 	cout << "max =" << maxVal << endl;
+	// --- End setting Qt dialog ---
 
+
+	// --- Start getting entity to be processed ---
 	// Get selected point cloud's index
 	selectedCloudIdx = validPoints[curComboBox.currentIndex()];
 
 	// Get a pointer pointing to selected point cloud
 	PointCloudT::Ptr selectedCloud = entityVector->GetCloudPtrOfIdx(selectedCloudIdx);
+
+	// NOTE: If processing a mesh, the above would be like:
+	/*
+	// Get selected mesh's index
+	selectedMeshIdx = validPoints[curComboBox.currentIndex()];
+
+	// Get a pointer pointing to selected point cloud
+	MeshT::Ptr selectedMesh = entityVector->GetMeshPtrOfIdx(selectedMeshIdx);
+	*/
+	// --- End getting entity to be processed ---
+
 
 	// --- Start point cloud processing ---
 	// YOUR CODE HERE
@@ -1224,7 +1289,7 @@ void PointCloudLab::on_planefitAction_triggered(bool checked)
 
 	completeCloud->AddCloud(planecloud);
 
-	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
 
 	//pcl::io::savePCDFile("C:/Users/sjtuzhy/Desktop/plane.pcd", *planecloud);

@@ -27,7 +27,6 @@ void MeshVisualization::Hide() {
 }
 
 void MeshVisualization::Save(string filepath){
-	//pcl::io::savePLYFile(filepath, *meshPtr);
 	Save(filepath, ".ply");
 }
 

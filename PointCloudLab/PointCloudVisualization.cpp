@@ -81,8 +81,9 @@ void PointCloudVisualization::SetPointSize(const int sz) {
 }
 
 void PointCloudVisualization::Save(string filepath) {
-	pcl::PCDWriter writer;
-	writer.write(filepath, *cloudPtr);
+	//pcl::PCDWriter writer;
+	//writer.write(filepath, *cloudPtr);
+	Save(filepath, ".pcd");
 }
 
 void PointCloudVisualization::Save(string filepath, string type) {

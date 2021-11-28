@@ -133,12 +133,7 @@ private:
     int OpenStlFile(string path);
     int OpenMeshFile(string path);
     int OpenPngFile(string path);
-
-    // Save point cloud/mesh, called by void on_saveFileAction_triggered(bool checked)
-	int SaveFiles(std::string filePath, PointCloudT::Ptr Cloud);
-	// -- Subfunction used to save different pointcloud/mesh file -- 
-	int SavePcdFile(string filePath, PointCloudT::Ptr Cloud);
-	int SavePlyFile(string filePath, PointCloudT::Ptr Cloud);
+    int OpenTxtFile(string path);
 
 	// Get the index of valid entities in visualVector
 	vector<int> GetValidEntitiesId();
@@ -191,6 +186,12 @@ private:
 
 	//int on_acceptCallback();
 	//int on_rejectCallback();
+
+    // Save point cloud/mesh, called by void on_saveFileAction_triggered(bool checked)
+	int SaveFiles(std::string filePath, PointCloudT::Ptr Cloud); // NOT USED
+	// -- Subfunction used to save different pointcloud/mesh file -- 
+	int SavePcdFile(string filePath, PointCloudT::Ptr Cloud);// NOT USED
+	int SavePlyFile(string filePath, PointCloudT::Ptr Cloud);// NOT USED
 
 protected:
 	// PCL viewer (binded to Qt::qvtkWidget, see void InitVtk())

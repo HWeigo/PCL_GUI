@@ -32,6 +32,7 @@ public:
 	void Save(string filepath);
 
 	// Save mesh to filepath as specific type
+	// Support type: ".ply"/".obj"/".stl"
 	void Save(string filepath, string type);
 	
 	// Delete point cloud (release memory)
