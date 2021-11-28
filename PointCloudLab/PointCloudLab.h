@@ -271,6 +271,7 @@ public slots:
 	void OnSaveCurPointAction();
 
 
+	// For testing
 	void on_pushButton_clicked();
 	void on_newBtn_clicked();
 

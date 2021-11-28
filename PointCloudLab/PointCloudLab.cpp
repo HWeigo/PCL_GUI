@@ -201,17 +201,16 @@ int PointCloudLab::OpenPcdFile(std::string path)
 
 	completeCloud->AddCloud(cloud);
 
-	// Todo: edit type, point num, face num
 	EntityTree * tempTree = new EntityTree(&ui, id, "PointXYZ", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
-    //isDeleted.push_back(false);
-    //isShown.push_back(true);
     return SUCCESS;
 }
+
+// Comment the define if to save obj to point cloud type
+#define LOAD_PLY_AS_MESH
 int PointCloudLab::OpenPlyFile(std::string path)
 {
-	//PointCloudT::Ptr cloud(new PointCloudT());
-	
+#ifdef LOAD_PLY_AS_MESH
 	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
 	if (pcl::io::loadPLYFile(path, *mesh))
 	{
@@ -229,39 +228,57 @@ int PointCloudLab::OpenPlyFile(std::string path)
 	viewer->resetCamera();
 	ui.qvtkWidget->update();
 
-	// Todo: edit type, point num, face num
 	EntityTree * tempTree = new EntityTree(&ui, id, "Mesh", meshv->GetPointNum(), meshv->GetFaceNum());
 	entityTree.push_back(tempTree);
+#else
+	PointCloudT::Ptr cloud(new PointCloudT());
+	if (pcl::io::loadPLYFile(path, *cloud))
+	{
+		cerr << "ERROR: Cannot open file " << path << "! Aborting..." << endl;
+		return FAILED;
+	}
 
+	vector<std::string> tempId = PointCloudLab::split(path, "/");
+	std::string id = tempId.back();
+	int idx = pointCloudVector->AddPointCloud(cloud, id);
+	PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(idx);
+	pcv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
 
-	//if (pcl::io::loadPLYFile(path, *cloud))
-	//{
-	//	cerr << "ERROR: Cannot open file " << path << "! Aborting..." << endl;
-	//	return FAILED;
-	//}
-
-	//vector<std::string> tempId = PointCloudLab::split(path, "/");
-	//std::string id = tempId.back();
-	//int idx = pointCloudVector->AddPointCloud(cloud, id);
-	//PointCloudVisualization *pcv = pointCloudVector->GetPCVofIdx(idx);
-	//pcv->Show();
-	//viewer->resetCamera();
-	//ui.qvtkWidget->update();
-
-	//completeCloud->AddCloud(cloud);
-
-	//// Todo: edit type, point num, face num
-	//PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetCloudSize(), 0);
-	//PointCloudTree.push_back(tempTree);
-	//isDeleted.push_back(false);
-	//isShown.push_back(true);
+	PointTree * tempTree = new PointTree(&ui, id, "PointCloud", pcv->GetCloudSize(), 0);
+	PointCloudTree.push_back(tempTree);
+#endif
 	return SUCCESS;
 }
+
+// Comment the define if to save obj to point cloud type
+#define LOAD_OBJ_AS_MESH
 int PointCloudLab::OpenObjFile(std::string path)
 {
+#ifdef LOAD_OBJ_AS_MESH
+	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
+	if (pcl::io::loadOBJFile(path, *mesh) < 0)
+	{
+		cerr << "ERROR: Cannot open file " << path << "! Aborting..." << endl;
+		return FAILED;
+	}
+
+	vector<std::string> tempId = PointCloudLab::split(path, "/");
+	std::string id = tempId.back();
+	int idx = entityVector->AddMesh(mesh, id);
+
+	//int idx = pointCloudVector->AddPointCloud(cloud, id);
+	MeshVisualization *meshv = entityVector->GetMESHVofIdx(idx);
+	meshv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
+
+	EntityTree * tempTree = new EntityTree(&ui, id, "Mesh", meshv->GetPointNum(), meshv->GetFaceNum());
+	entityTree.push_back(tempTree);
+#else
 	pcl::PolygonMesh mesh;
 	PointCloudT::Ptr cloud(new PointCloudT());
-
 
 	if (pcl::io::loadPolygonFileOBJ(path, mesh) == -1)//*打开点云文件  path为obj文件名
 	{
@@ -280,11 +297,9 @@ int PointCloudLab::OpenObjFile(std::string path)
 
 	completeCloud->AddCloud(cloud);
 
-	// Todo: edit type, point num, face num
 	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
 	entityTree.push_back(tempTree);
-	//isDeleted.push_back(false);
-	//isShown.push_back(true);
+#endif
 	return SUCCESS;
 
 }
@@ -292,8 +307,27 @@ int PointCloudLab::OpenObjFile(std::string path)
 //stl,mesh,png 不能读成pointcloudxyz格式
 int PointCloudLab::OpenStlFile(std::string path)
 {
-	return CANCEL;
+	pcl::PolygonMesh::Ptr mesh(new pcl::PolygonMesh());
+	if (!pcl::io::loadPolygonFileSTL(path, *mesh))
+	{
+		cerr << "ERROR: Cannot open file " << path << "! Aborting..." << endl;
+		return FAILED;
+	}
+	vector<std::string> tempId = PointCloudLab::split(path, "/");
+	std::string id = tempId.back();
+	int idx = entityVector->AddMesh(mesh, id);
+
+	//int idx = pointCloudVector->AddPointCloud(cloud, id);
+	MeshVisualization *meshv = entityVector->GetMESHVofIdx(idx);
+	meshv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
+
+	EntityTree * tempTree = new EntityTree(&ui, id, "Mesh", meshv->GetPointNum(), meshv->GetFaceNum());
+	entityTree.push_back(tempTree);
+	return SUCCESS;
 }
+
 int PointCloudLab::OpenMeshFile(std::string path)
 {
 	return CANCEL;
@@ -302,7 +336,6 @@ int PointCloudLab::OpenMeshFile(std::string path)
 
 
 //png格式 可以读成矩阵
-
 int PointCloudLab::OpenPngFile(std::string path)
 {
 	QDialog dialog(this);
@@ -480,10 +513,7 @@ int PointCloudLab::OpenPngFile(std::string path)
 		//isShown.push_back(true);
 		return SUCCESS;
 	}
-	
-	
-	
-}
+	}
 
 
 
