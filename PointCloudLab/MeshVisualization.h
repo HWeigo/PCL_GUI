@@ -28,8 +28,11 @@ public:
 	// Hide mesh
 	void Hide();
 	
-	// Save mesh to filepath
+	// Save mesh to filepath (default)
 	void Save(string filepath);
+
+	// Save mesh to filepath as specific type
+	void Save(string filepath, string type);
 	
 	// Delete point cloud (release memory)
 	void Delete();

@@ -30,6 +30,12 @@ void MeshVisualization::Save(string filepath){
 	pcl::io::savePLYFile(filepath, *meshPtr);
 }
 
+void MeshVisualization::Save(string filepath, string type) {
+	if (type == ".ply") {
+		pcl::io::savePLYFile(filepath, *meshPtr);
+	}
+}
+
 void MeshVisualization::Delete(){
 	Hide();
 	//pcl::PolygonMesh().

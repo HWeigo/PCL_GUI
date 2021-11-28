@@ -1949,6 +1949,11 @@ void PointCloudLab::OnSaveCurPointAction()
 	QString curPath = QCoreApplication::applicationDirPath();
 	QString dlgTitle = "保存点云"; //对话框标题
 	QString filter = "pcd文件(*.pcd);;ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	if (entityVector->GetType(curPointsId) == POINTCLOUD_TYPE) {
+		filter = "pcd文件(*.pcd);;;;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	} else if (entityVector->GetType(curPointsId) == MESH_TYPE) {
+		filter = "ply文件(*.ply);;obj文件(*.obj);;stl文件(*.stl);;mesh文件(*.mesh);;png文件(*.png);;所有文件(*.*)"; //文件过滤器
+	}
 	QString fileName = QFileDialog::getSaveFileName(this, dlgTitle, curPath, filter);
 	if (fileName.isEmpty()) {
 		return;

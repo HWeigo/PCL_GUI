@@ -40,17 +40,17 @@
     <ClCompile Include="PointCloudVisualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\BaseVisualization.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EntityVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EntityTree.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\BaseVisualization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\MeshVisualization.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,17 +65,17 @@
     <ClInclude Include="fun.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\BaseVisualization.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\NewLab\PointCloudLab\PointCloudLab\MeshVisualization.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EntityVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EntityTree.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\BaseVisualization.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\OneDrive%40sjtu.edu.cn\ALGO\PointCloudLibary_XiongZhenhua\PointCloudLab\PointCloudLab\MeshVisualization.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

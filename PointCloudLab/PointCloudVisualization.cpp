@@ -85,6 +85,12 @@ void PointCloudVisualization::Save(string filepath) {
 	writer.write(filepath, *cloudPtr);
 }
 
+void PointCloudVisualization::Save(string filepath, string type) {
+	if (type == ".pcd") {
+		pcl::io::savePCDFile(filepath, *cloudPtr);
+	}
+}
+
 vector<int> PointCloudVisualization::GetColor() {
 	vector<int> color(3);
 	color[0] = red;

@@ -5,6 +5,8 @@
 
 // Point Cloud Library
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/obj_io.h>
+#include <pcl/io/vtk_lib_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/PolygonMesh.h>
 #include <pcl/point_types.h>
@@ -47,6 +49,9 @@ public:
 	
 	// Virtual function: save pointcloud/mesh
 	virtual void Save(string filepath) = 0;
+
+	// Virtual function: save pointcloud/mesh as specific type
+	virtual void Save(string filepath, string type) = 0;
 	
 	// Virtual function: delete ave pointcloud/mesh
 	virtual void Delete() = 0;

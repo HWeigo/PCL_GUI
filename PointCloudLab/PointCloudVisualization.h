@@ -52,8 +52,11 @@ public:
 	// Hide pointcloud
 	void Hide();
 
-	// Save pointcloud to filepath
+	// Save pointcloud to filepath (default)
 	void Save(string filepath);
+
+	// Save pointcloud to filepath as specific type
+	void Save(string filepath, string type);
 
 	// Delete point cloud (release memory)
 	void Delete();
