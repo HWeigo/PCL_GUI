@@ -63,6 +63,8 @@ private:
 
 	// Index of the selected point cloud to be processed picking
 	int selectedCloudIdx = -1;
+	// Index of the selected mesh to be processed picking
+	int selectedMeshIdx = -1;
 
 	// Point indexs in the selected point cloud (temporarily used in callback)
 	vector<int> selectedPointIdxs;
@@ -139,11 +141,11 @@ private:
 	int SavePlyFile(string filePath, PointCloudT::Ptr Cloud);
 
 	// Get the index of valid entities in visualVector
-	vector<int> GetValidPointsId();
+	vector<int> GetValidEntitiesId();
 
 	// Get the index of valid entities of a specific type in visualVector
 	// type == POINTCLOUD_TYPE or MESH_TYPE, defined in BaseVisualization.h
-	vector<int> GetValidPointsId(string type);
+	vector<int> GetValidEntitiesId(string type);
 
 	// --- EXAMPLE START ---
 	// Assume two point (p1 p2) cloud and one mesh (m1) is sequentially opened or created 
@@ -233,8 +235,15 @@ public slots:
 	void on_match1Action_triggered(bool checked);//���ƴ���׼
 	void on_match2Action_triggered(bool checked);//���ƾ���׼
 	void on_match3Action_triggered(bool checked);//����ƴ��
+
+	// Qt slot: copy selected point cloud 
     void on_copyPointAction_triggered(bool checked);//���Ƶ���
+
+	// Qt slot: extract selected point cloud 
     void on_extractPointAction_triggered(bool checked);//��ȡ����
+
+	// Qt slot: extract point cloud from mesh
+	void on_meshToPointCloudAction_triggered(bool checked);
 
 	// Qt slot: enable point picking mode
 	void on_pushButton_pointPick_clicked();
@@ -269,7 +278,6 @@ public slots:
 
 	// Qt slot: save pointcloud/mesh 
 	void OnSaveCurPointAction();
-
 
 	// For testing
 	void on_pushButton_clicked();

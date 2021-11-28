@@ -591,8 +591,7 @@ int  PointCloudLab::SavePlyFile(std::string filepath, PointCloudT::Ptr Cloud)
 //点云保存
 void PointCloudLab::on_saveFileAction_triggered(bool checked)
 {
-	// Todo: check valid point
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -725,7 +724,7 @@ void PointCloudLab::on_saveFileAction_triggered(bool checked)
 void PointCloudLab::on_filterAction1_triggered(bool checked)
 {
 	// Get valid point cloud index (note: point cloud only)
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -838,7 +837,7 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 {
 	cout << "体素滤波\n";
 	// MARK
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -906,7 +905,7 @@ void PointCloudLab::on_filterAction2_triggered(bool checked)
 //统计滤波
 void PointCloudLab::on_filterAction3_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -973,7 +972,7 @@ void PointCloudLab::on_filterAction4_triggered(bool checked)
 {
 	cout << "投影滤波\n";
 	// MARK
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1062,7 +1061,7 @@ void PointCloudLab::on_filterAction4_triggered(bool checked)
 //直线拟合
 void PointCloudLab::on_linefitAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1144,7 +1143,7 @@ void PointCloudLab::on_linefitAction_triggered(bool checked)
 //平面拟合
 void PointCloudLab::on_planefitAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1226,7 +1225,7 @@ void PointCloudLab::on_planefitAction_triggered(bool checked)
 //球面拟合
 void PointCloudLab::on_ballfitAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1307,7 +1306,7 @@ void PointCloudLab::on_ballfitAction_triggered(bool checked)
 //平面度计算
 void PointCloudLab::on_pmdAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1356,7 +1355,7 @@ void PointCloudLab::on_pmdAction_triggered(bool checked)
 //边缘提取
 void PointCloudLab::on_boundaryAction_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -1420,7 +1419,7 @@ void PointCloudLab::on_boundaryAction_triggered(bool checked)
 //点云粗配准
 void PointCloudLab::on_match1Action_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() < 2) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前打开的点云数量小于2";
@@ -1490,7 +1489,7 @@ void PointCloudLab::on_match1Action_triggered(bool checked)
 //点云精配准
 void PointCloudLab::on_match2Action_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() < 2) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前打开的点云数量小于2";
@@ -1558,7 +1557,7 @@ void PointCloudLab::on_match2Action_triggered(bool checked)
 //点云拼接
 void PointCloudLab::on_match3Action_triggered(bool checked)
 {
-	vector<int> validPoints = GetValidPointsId();
+	vector<int> validPoints = GetValidEntitiesId();
 	if (validPoints.size() < 2) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前打开的点云数量小于2";
@@ -1717,8 +1716,6 @@ void PointCloudLab::on_match3Action_triggered(bool checked)
 }
 
 
-
-
  //ROI复制点云
 void PointCloudLab::on_copyPointAction_triggered(bool checked)
 {
@@ -1789,6 +1786,54 @@ void PointCloudLab::on_extractPointAction_triggered(bool checked)
 
 	entityTree[selectedCloudIdx]->pointsSize->setText(0, QString("点数: ") + QString::number(pcv->GetPointNum()));
 	PushMessage("提取点云完成，按 Drag 键结束");
+}
+
+void PointCloudLab::on_meshToPointCloudAction_triggered(bool checked) {
+	vector<int> validMesh = GetValidEntitiesId(MESH_TYPE);
+	if (validMesh.size() == 0) {
+		QString dlgTitle = "提示";
+		QString strInfo = "当前没有打开的网格";
+		QMessageBox::information(this, dlgTitle, strInfo, QMessageBox::Ok, QMessageBox::NoButton);
+		return;
+	}
+
+	QDialog dialog(this);
+	dialog.setFixedSize(300, 100);
+	dialog.setWindowTitle("选择要提取的网格");
+	QFormLayout form(&dialog);
+	QComboBox curComboBox;
+	for (int i = 0; i < validMesh.size(); ++i) {
+		curComboBox.addItem(QString::fromStdString(entityVector->GetId(validMesh[i])));//改成点云的名字
+	}
+	form.addRow(QString("选择网格："), &curComboBox);
+
+	QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+		Qt::Horizontal, &dialog);
+	form.addRow(&buttonBox);
+	QObject::connect(&buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+	QObject::connect(&buttonBox, SIGNAL(rejected()), &dialog, SLOT(reje ct()));
+	
+	if (dialog.exec() == QDialog::Rejected) {
+		return;
+	}
+
+	selectedMeshIdx = validMesh[curComboBox.currentIndex()];
+	MeshT::Ptr selectedMesh = entityVector->GetMeshPtrOfIdx(selectedMeshIdx);
+	
+	PointCloudT::Ptr cloud(new PointCloudT());
+	pcl::fromPCLPointCloud2(selectedMesh->cloud, *cloud);
+
+	string oriId = entityVector->GetId(selectedMeshIdx);
+	vector<std::string> tempId = PointCloudLab::split(oriId, ".");
+	string id = tempId.front() + ".pcd";
+	int idx = entityVector->AddPointCloud(cloud, id);
+	PointCloudVisualization *pcv = entityVector->GetPCVofIdx(idx);
+	pcv->Show();
+	viewer->resetCamera();
+	ui.qvtkWidget->update();
+
+	EntityTree * tempTree = new EntityTree(&ui, id, "PointCloud", pcv->GetPointNum(), 0);
+	entityTree.push_back(tempTree);
 }
 
 
@@ -2128,7 +2173,7 @@ void PointCloudLab::area_callback(const pcl::visualization::AreaPickingEvent& ev
 }
 void PointCloudLab::on_pushButton_pointPick_clicked() {
 	cout << "-- Point pick mode -- " << endl;
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -2202,7 +2247,7 @@ void PointCloudLab::on_pushButton_pointPick_clicked() {
 void PointCloudLab::on_pushButton_areaPick_clicked() {
 
 	cout << "-- Area pick mode -- " << endl;
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	if (validPoints.size() == 0) {
 		QString dlgTitle = "提示";
 		QString strInfo = "当前没有打开的点云";
@@ -2362,7 +2407,7 @@ void PointCloudLab::on_pushButton_setting_clicked() {
 	coordinateSystemSize = coordSizeBox.value();
 
 	// Set point size
-	vector<int> validPoints = GetValidPointsId(POINTCLOUD_TYPE);
+	vector<int> validPoints = GetValidEntitiesId(POINTCLOUD_TYPE);
 	for (int i : validPoints) {
 		PointCloudVisualization* pcv = entityVector->GetPCVofIdx(i);
 		pcv->SetPointSize(pointViewerSize);
@@ -2389,7 +2434,7 @@ void PointCloudLab::on_pushButton_clicked() {
 	ui.qvtkWidget->update();
 }
 
-vector<int> PointCloudLab::GetValidPointsId()
+vector<int> PointCloudLab::GetValidEntitiesId()
 {
 	vector<int> validPoints;
 	for (int i = 0; i < entityVector->GetSize(); ++i) {
@@ -2401,7 +2446,7 @@ vector<int> PointCloudLab::GetValidPointsId()
 	return validPoints;
 }
 
-vector<int> PointCloudLab::GetValidPointsId(string type)
+vector<int> PointCloudLab::GetValidEntitiesId(string type)
 {
 	vector<int> validPoints;
 	for (int i = 0; i < entityVector->GetSize(); ++i) {

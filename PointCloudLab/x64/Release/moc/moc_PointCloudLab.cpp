@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_PointCloudLab_t {
-    QByteArrayData data[32];
-    char stringdata0[765];
+    QByteArrayData data[33];
+    char stringdata0[801];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,19 +50,20 @@ QT_MOC_LITERAL(15, 346, 25), // "on_match2Action_triggered"
 QT_MOC_LITERAL(16, 372, 25), // "on_match3Action_triggered"
 QT_MOC_LITERAL(17, 398, 28), // "on_copyPointAction_triggered"
 QT_MOC_LITERAL(18, 427, 31), // "on_extractPointAction_triggered"
-QT_MOC_LITERAL(19, 459, 31), // "on_pushButton_pointPick_clicked"
-QT_MOC_LITERAL(20, 491, 30), // "on_pushButton_areaPick_clicked"
-QT_MOC_LITERAL(21, 522, 26), // "on_pushButton_drag_clicked"
-QT_MOC_LITERAL(22, 549, 31), // "on_pushButton_allSelect_clicked"
-QT_MOC_LITERAL(23, 581, 34), // "on_pushButton_invertSelect_cl..."
-QT_MOC_LITERAL(24, 616, 29), // "on_pushButton_setting_clicked"
-QT_MOC_LITERAL(25, 646, 12), // "OnShowAction"
-QT_MOC_LITERAL(26, 659, 12), // "OnHideAction"
-QT_MOC_LITERAL(27, 672, 14), // "OnDeleteAction"
-QT_MOC_LITERAL(28, 687, 16), // "OnSetColorAction"
-QT_MOC_LITERAL(29, 704, 20), // "OnSaveCurPointAction"
-QT_MOC_LITERAL(30, 725, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(31, 747, 17) // "on_newBtn_clicked"
+QT_MOC_LITERAL(19, 459, 35), // "on_meshToPointCloudAction_tri..."
+QT_MOC_LITERAL(20, 495, 31), // "on_pushButton_pointPick_clicked"
+QT_MOC_LITERAL(21, 527, 30), // "on_pushButton_areaPick_clicked"
+QT_MOC_LITERAL(22, 558, 26), // "on_pushButton_drag_clicked"
+QT_MOC_LITERAL(23, 585, 31), // "on_pushButton_allSelect_clicked"
+QT_MOC_LITERAL(24, 617, 34), // "on_pushButton_invertSelect_cl..."
+QT_MOC_LITERAL(25, 652, 29), // "on_pushButton_setting_clicked"
+QT_MOC_LITERAL(26, 682, 12), // "OnShowAction"
+QT_MOC_LITERAL(27, 695, 12), // "OnHideAction"
+QT_MOC_LITERAL(28, 708, 14), // "OnDeleteAction"
+QT_MOC_LITERAL(29, 723, 16), // "OnSetColorAction"
+QT_MOC_LITERAL(30, 740, 20), // "OnSaveCurPointAction"
+QT_MOC_LITERAL(31, 761, 21), // "on_pushButton_clicked"
+QT_MOC_LITERAL(32, 783, 17) // "on_newBtn_clicked"
 
     },
     "PointCloudLab\0on_openFileAction_triggered\0"
@@ -81,6 +82,7 @@ QT_MOC_LITERAL(31, 747, 17) // "on_newBtn_clicked"
     "on_match3Action_triggered\0"
     "on_copyPointAction_triggered\0"
     "on_extractPointAction_triggered\0"
+    "on_meshToPointCloudAction_triggered\0"
     "on_pushButton_pointPick_clicked\0"
     "on_pushButton_areaPick_clicked\0"
     "on_pushButton_drag_clicked\0"
@@ -99,7 +101,7 @@ static const uint qt_meta_data_PointCloudLab[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      29,   14, // methods
+      30,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -107,37 +109,39 @@ static const uint qt_meta_data_PointCloudLab[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,  159,    2, 0x0a /* Public */,
-       4,    1,  162,    2, 0x0a /* Public */,
-       5,    1,  165,    2, 0x0a /* Public */,
-       6,    1,  168,    2, 0x0a /* Public */,
-       7,    1,  171,    2, 0x0a /* Public */,
-       8,    1,  174,    2, 0x0a /* Public */,
-       9,    1,  177,    2, 0x0a /* Public */,
-      10,    1,  180,    2, 0x0a /* Public */,
-      11,    1,  183,    2, 0x0a /* Public */,
-      12,    1,  186,    2, 0x0a /* Public */,
-      13,    1,  189,    2, 0x0a /* Public */,
-      14,    1,  192,    2, 0x0a /* Public */,
-      15,    1,  195,    2, 0x0a /* Public */,
-      16,    1,  198,    2, 0x0a /* Public */,
-      17,    1,  201,    2, 0x0a /* Public */,
-      18,    1,  204,    2, 0x0a /* Public */,
-      19,    0,  207,    2, 0x0a /* Public */,
-      20,    0,  208,    2, 0x0a /* Public */,
-      21,    0,  209,    2, 0x0a /* Public */,
-      22,    0,  210,    2, 0x0a /* Public */,
-      23,    0,  211,    2, 0x0a /* Public */,
-      24,    0,  212,    2, 0x0a /* Public */,
-      25,    0,  213,    2, 0x0a /* Public */,
-      26,    0,  214,    2, 0x0a /* Public */,
-      27,    0,  215,    2, 0x0a /* Public */,
-      28,    0,  216,    2, 0x0a /* Public */,
-      29,    0,  217,    2, 0x0a /* Public */,
-      30,    0,  218,    2, 0x0a /* Public */,
-      31,    0,  219,    2, 0x0a /* Public */,
+       1,    1,  164,    2, 0x0a /* Public */,
+       4,    1,  167,    2, 0x0a /* Public */,
+       5,    1,  170,    2, 0x0a /* Public */,
+       6,    1,  173,    2, 0x0a /* Public */,
+       7,    1,  176,    2, 0x0a /* Public */,
+       8,    1,  179,    2, 0x0a /* Public */,
+       9,    1,  182,    2, 0x0a /* Public */,
+      10,    1,  185,    2, 0x0a /* Public */,
+      11,    1,  188,    2, 0x0a /* Public */,
+      12,    1,  191,    2, 0x0a /* Public */,
+      13,    1,  194,    2, 0x0a /* Public */,
+      14,    1,  197,    2, 0x0a /* Public */,
+      15,    1,  200,    2, 0x0a /* Public */,
+      16,    1,  203,    2, 0x0a /* Public */,
+      17,    1,  206,    2, 0x0a /* Public */,
+      18,    1,  209,    2, 0x0a /* Public */,
+      19,    1,  212,    2, 0x0a /* Public */,
+      20,    0,  215,    2, 0x0a /* Public */,
+      21,    0,  216,    2, 0x0a /* Public */,
+      22,    0,  217,    2, 0x0a /* Public */,
+      23,    0,  218,    2, 0x0a /* Public */,
+      24,    0,  219,    2, 0x0a /* Public */,
+      25,    0,  220,    2, 0x0a /* Public */,
+      26,    0,  221,    2, 0x0a /* Public */,
+      27,    0,  222,    2, 0x0a /* Public */,
+      28,    0,  223,    2, 0x0a /* Public */,
+      29,    0,  224,    2, 0x0a /* Public */,
+      30,    0,  225,    2, 0x0a /* Public */,
+      31,    0,  226,    2, 0x0a /* Public */,
+      32,    0,  227,    2, 0x0a /* Public */,
 
  // slots: parameters
+    QMetaType::Void, QMetaType::Bool,    3,
     QMetaType::Void, QMetaType::Bool,    3,
     QMetaType::Void, QMetaType::Bool,    3,
     QMetaType::Void, QMetaType::Bool,    3,
@@ -193,19 +197,20 @@ void PointCloudLab::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 13: _t->on_match3Action_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 14: _t->on_copyPointAction_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 15: _t->on_extractPointAction_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 16: _t->on_pushButton_pointPick_clicked(); break;
-        case 17: _t->on_pushButton_areaPick_clicked(); break;
-        case 18: _t->on_pushButton_drag_clicked(); break;
-        case 19: _t->on_pushButton_allSelect_clicked(); break;
-        case 20: _t->on_pushButton_invertSelect_clicked(); break;
-        case 21: _t->on_pushButton_setting_clicked(); break;
-        case 22: _t->OnShowAction(); break;
-        case 23: _t->OnHideAction(); break;
-        case 24: _t->OnDeleteAction(); break;
-        case 25: _t->OnSetColorAction(); break;
-        case 26: _t->OnSaveCurPointAction(); break;
-        case 27: _t->on_pushButton_clicked(); break;
-        case 28: _t->on_newBtn_clicked(); break;
+        case 16: _t->on_meshToPointCloudAction_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 17: _t->on_pushButton_pointPick_clicked(); break;
+        case 18: _t->on_pushButton_areaPick_clicked(); break;
+        case 19: _t->on_pushButton_drag_clicked(); break;
+        case 20: _t->on_pushButton_allSelect_clicked(); break;
+        case 21: _t->on_pushButton_invertSelect_clicked(); break;
+        case 22: _t->on_pushButton_setting_clicked(); break;
+        case 23: _t->OnShowAction(); break;
+        case 24: _t->OnHideAction(); break;
+        case 25: _t->OnDeleteAction(); break;
+        case 26: _t->OnSetColorAction(); break;
+        case 27: _t->OnSaveCurPointAction(); break;
+        case 28: _t->on_pushButton_clicked(); break;
+        case 29: _t->on_newBtn_clicked(); break;
         default: ;
         }
     }
@@ -236,13 +241,13 @@ int PointCloudLab::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 29)
+        if (_id < 30)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 29;
+        _id -= 30;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 29)
+        if (_id < 30)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 29;
+        _id -= 30;
     }
     return _id;
 }
