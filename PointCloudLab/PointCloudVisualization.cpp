@@ -58,6 +58,13 @@ void PointCloudVisualization::DeletePointFromVector(const unordered_set<int> &se
 	pointNum = cloudPtr->size();
 }
 
+void PointCloudVisualization::ChangeID(string newID) {
+	//viewer->removePointCloud(id);
+	Hide();
+	BaseVisualization::ChangeID(newID);
+	Show();
+}
+
 
 void PointCloudVisualization::SetColor(const int r, const int g, const int b) {
 	red = r;

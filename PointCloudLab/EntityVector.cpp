@@ -115,3 +115,13 @@ string EntityVector::GetId(const int idx) {
 	assert(idx >= 0 && idx < size);
 	return visualVector[idx]->GetId();
 }
+
+void EntityVector::ChangeId(const int idx, string newID) {
+	if (GetType(idx) == POINTCLOUD_TYPE) {
+		PointCloudVisualization* pcv = (PointCloudVisualization*)visualVector[idx];
+		pcv->ChangeID(newID);
+	} else {
+		MeshVisualization* meshv = (MeshVisualization*)visualVector[idx];
+		meshv->ChangeID(newID);
+	}
+}

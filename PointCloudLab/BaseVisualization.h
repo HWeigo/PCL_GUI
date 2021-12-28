@@ -59,6 +59,9 @@ public:
 	// Virtual function: used to return the type of derive function
 	virtual string GetType() = 0;
 
+	// Virtual funciton: change pointcloud/mesh's ID
+	void ChangeID(string newID) { id = newID; };
+
 	// Return current element's id
 	inline string GetId() { return id; };
 

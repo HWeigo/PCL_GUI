@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QComboBox>
 #include <QDebug>
+#include <QInputDialog>
 
 #include <iostream>
 #include "fun.hpp"
@@ -75,6 +76,7 @@ void PointCloudLab::contextMenuEvent(QContextMenuEvent *event)
                 treeMenu->addAction(deleteAction);
                 treeMenu->addAction(setColorAction);
 				treeMenu->addAction(saveCurPointAction);
+				treeMenu->addAction(renameAction);
                 treeMenu->exec(QCursor::pos());   //菜单弹出位置为鼠标点击位置
                
                 break;
@@ -93,12 +95,14 @@ void PointCloudLab::InitMenuAction()
 	deleteAction = new QAction("删除", ui.treeWidget);
 	setColorAction = new QAction("设置颜色", ui.treeWidget);
 	saveCurPointAction = new QAction("保存", ui.treeWidget);
+	renameAction = new QAction("重命名", ui.treeWidget);
 
 	connect(showAction, SIGNAL(triggered(bool)), this, SLOT(OnShowAction()));
 	connect(hideAction, SIGNAL(triggered(bool)), this, SLOT(OnHideAction()));
 	connect(deleteAction, SIGNAL(triggered(bool)), this, SLOT(OnDeleteAction()));
 	connect(setColorAction, SIGNAL(triggered(bool)), this, SLOT(OnSetColorAction()));
 	connect(saveCurPointAction, SIGNAL(triggered(bool)), this, SLOT(OnSaveCurPointAction()));
+	connect(renameAction, SIGNAL(triggered(bool)), this, SLOT(OnRenameAction()));
 }
 
 void PointCloudLab::InitVtk()
@@ -2100,6 +2104,23 @@ void PointCloudLab::OnSaveCurPointAction()
 
 	PushMessage("保存点云");
 
+}
+
+void PointCloudLab::OnRenameAction() {
+	cout << "rename" << endl;
+	
+	bool ok;
+	QString text = QInputDialog::getText(this, tr("重命名"),tr("请输入新ID"), QLineEdit::Normal,0, &ok);
+	if (ok && !text.isEmpty())
+    {
+		string preId = entityTree[curPointsId]->cloudName->text(0).toStdString();
+		vector<std::string> temp = split(preId, ".");
+		PushMessage(text.toStdString());
+		entityVector->ChangeId(curPointsId, text.toStdString());
+		QString newId = text + QString::fromStdString("." + temp.back());
+		entityTree[curPointsId]->cloudName->setText(0, newId);
+		PushMessage("rename " + to_string(curPointsId) + " entity");
+    }
 }
 
 // Interation:

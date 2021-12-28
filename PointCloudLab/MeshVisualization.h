@@ -55,5 +55,8 @@ public:
 	
 	// Used to indicate current visualization if for mesh (MESH_TYPE)
 	inline string GetType() {return MESH_TYPE;};
+
+	// Change mesh's ID
+	void ChangeID(string newID);
 };
 

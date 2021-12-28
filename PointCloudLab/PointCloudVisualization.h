@@ -89,4 +89,7 @@ public:
 	// Used to indicate current visualization if for point cloud (POINTCLOUD_TYPE)
 	inline string GetType() {return POINTCLOUD_TYPE;};
 
+	// Change point cloud's ID
+	void ChangeID(string newID);
+
 };

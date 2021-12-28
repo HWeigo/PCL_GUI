@@ -12,7 +12,7 @@ EntityTree::EntityTree(Ui::PointCloudLabClass *input_ui, string filePath, std::s
 
 	cloudName = new QTreeWidgetItem(ui->treeWidget, tempList);
 	cloudName->setFlags(cloudName->flags() &(~Qt::ItemIsEditable));
-	
+
 	QStringList tempList_sub1;
 	tempList_sub1.push_back(QString("µãÊý: "));
 	tempList_sub1.push_back(QString::number(pointNum));

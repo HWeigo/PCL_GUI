@@ -70,6 +70,9 @@ public:
 	// Return the ID of the idx the element
 	string GetId(const int idx);
 
+	// Change idx th element's ID
+	void ChangeId(const int idx, string newID);
+
 	// Save the idx th point cloud to filepath
 	void SavePointCloudOfIdx(const string filepath, const int idx, const string type);
 

@@ -61,6 +61,12 @@ vector<int> MeshVisualization::GetColor()
 	return color;
 }
 
+void MeshVisualization::ChangeID(string newID) {
+	Hide();
+	BaseVisualization::ChangeID(newID);
+	Show();
+}
+
 int MeshVisualization::GetFaceNum()
 {
 	return meshPtr->polygons.size();

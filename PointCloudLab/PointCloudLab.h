@@ -96,6 +96,7 @@ private:
     QAction *deleteAction;
 	QAction *setColorAction;
 	QAction *saveCurPointAction;
+	QAction *renameAction;
     int curPointsId = -1;
 
 	// Set point size for all the point cloud
@@ -279,6 +280,9 @@ public slots:
 
 	// Qt slot: save pointcloud/mesh 
 	void OnSaveCurPointAction();
+
+	// Qt slot: save pointcloud/mesh 
+	void OnRenameAction();
 
 	// For testing
 	void on_pushButton_clicked();
