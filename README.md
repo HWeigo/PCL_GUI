@@ -16,7 +16,7 @@ This is a point cloud graphical utility based on PCL and Qt.
 * customize settings
 * point cloud selection and extraction
 * module filters
-* wating to add more...
+* coming soon...
 ---
 ## License
 [MIT-License](LICENSE).
